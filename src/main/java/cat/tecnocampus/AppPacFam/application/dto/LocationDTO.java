@@ -6,9 +6,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class LocationDTO {
-	@NotNull(message = "Email cannot be null")
-	@NotBlank(message = "Email cannot be blank")
-	private String idLocation;
+	@NotNull(message = "Id cannot be null")
+	@NotBlank(message = "Id cannot be blank")
+	private String locationId;
 	private String name;
 	private LocalDateTime entryTime;
 	private LocalDateTime departureTime;
@@ -17,12 +17,12 @@ public class LocationDTO {
 		
 	}
 
-	public String getIdLocation() {
-		return idLocation;
+	public String getLocationId() {
+		return locationId;
 	}
 
-	public void setIdLocation(String idLocation) {
-		this.idLocation = idLocation;
+	public void setLocationId(String locationId) {
+		this.locationId = locationId;
 	}
 
 	public String getName() {

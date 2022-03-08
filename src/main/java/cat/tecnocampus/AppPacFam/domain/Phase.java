@@ -1,12 +1,15 @@
 package cat.tecnocampus.AppPacFam.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Phase {
 	private String idPhase;
 	private String name;
 	private LocalDateTime entryTime;
 	private LocalDateTime departureTime;
+	private List<State> states = new ArrayList<>();
 	
 	public Phase() {
 		
@@ -42,6 +45,14 @@ public class Phase {
 
 	public void setDepartureTime(LocalDateTime departureTime) {
 		this.departureTime = departureTime;
+	}
+	
+	public List<State> getStates() {
+		return states;
+	}
+
+	public void setStates(List<State> states) {
+		this.states = states;
 	}
 	
 	

@@ -3,7 +3,7 @@ package cat.tecnocampus.AppPacFam.domain;
 import java.time.LocalDateTime;
 
 public class Location {
-	private String idLocation;
+	private String locationId;
 	private String name;
 	private LocalDateTime entryTime;
 	private LocalDateTime departureTime;
@@ -12,12 +12,12 @@ public class Location {
 		
 	}
 
-	public String getIdLocation() {
-		return idLocation;
+	public String getLocationId() {
+		return locationId;
 	}
 
-	public void setIdLocation(String idLocation) {
-		this.idLocation = idLocation;
+	public void setLocationId(String locationId) {
+		this.locationId = locationId;
 	}
 
 	public String getName() {

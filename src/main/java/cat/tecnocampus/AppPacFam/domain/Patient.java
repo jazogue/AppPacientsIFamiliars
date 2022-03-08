@@ -4,21 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Patient {
-	private String idPatient;
+	private String patientId;
+	private String patientName;
+	private String firstSurname;
+	private String secondSurname;
 	private List<Location> locations = new ArrayList<>();
 	private List<Phase> phases = new ArrayList<>();
-	private List<State> states = new ArrayList<>();
 	
 	public Patient() {
 		
 	}
 
-	public String getIdPatient() {
-		return idPatient;
+	public String getPatientId() {
+		return patientId;
 	}
 
-	public void setIdPatient(String idPatient) {
-		this.idPatient = idPatient;
+	public void setPatientId(String patientId) {
+		this.patientId = patientId;
 	}
 
 	public List<Location> getLocations() {
@@ -37,12 +39,28 @@ public class Patient {
 		this.phases = phases;
 	}
 
-	public List<State> getStates() {
-		return states;
+	public String getPatientName() {
+		return patientName;
 	}
 
-	public void setStates(List<State> states) {
-		this.states = states;
+	public void setPatientName(String patientName) {
+		this.patientName = patientName;
+	}
+
+	public String getFirstSurname() {
+		return firstSurname;
+	}
+
+	public void setFirstSurname(String firstSurname) {
+		this.firstSurname = firstSurname;
+	}
+
+	public String getSecondSurname() {
+		return secondSurname;
+	}
+
+	public void setSecondSurname(String secondSurname) {
+		this.secondSurname = secondSurname;
 	}
 	
 	

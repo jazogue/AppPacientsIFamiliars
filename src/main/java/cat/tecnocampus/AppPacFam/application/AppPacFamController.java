@@ -8,13 +8,10 @@ import cat.tecnocampus.AppPacFam.domain.Location;
 import cat.tecnocampus.AppPacFam.domain.Patient;
 import cat.tecnocampus.AppPacFam.domain.Phase;
 import cat.tecnocampus.AppPacFam.domain.State;
-import cat.tecnocampus.tinder.application.dto.ProfileDTO;
-import cat.tecnocampus.tinder.domain.Profile;
 
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service //same as @Component
@@ -25,14 +22,20 @@ public class AppPacFamController {
 		this.patientDAO = patientDAO;
 	}
 
-	public PatientDTO getPatient(String id) {
+	public PatientDTO getPatientById(String id) {
 		return patientDAO.getPatientById(id);
 	}
-
-
-	public List<LocationDTO> getLocations(String id) {
-		PatientDTO patientDTO = this.getPatient(id);
-		return getLocationsDTOS(patientDTO);
+	
+	public List<LocationDTO> getLocationsByPatientId(String id) {
+		return patientDAO.getLocationsByPatientId(id);
+	}
+	
+	public List<PhaseDTO> getPhasesByPatientId(String id) {
+		return patientDAO.getPhasesByPatientId(id);
+	}
+	
+	public List<StateDTO> getStatesByPatientId(String id) {
+		return patientDAO.getStatesByPatientId(id);
 	}
 
 
@@ -41,10 +44,12 @@ public class AppPacFamController {
 	
 	private PatientDTO patientToPatientDTO(Patient patient) {
 		PatientDTO result = new PatientDTO();
-		result.setIdPatient(patient.getIdPatient());
+		result.setPatientId(patient.getPatientId());
+		result.setPatientName(patient.getPatientName());
+		result.setFirstSurname(patient.getFirstSurname());
+		result.setSecondSurname(patient.getSecondSurname());
 		result.setLocations(patient.getLocations().stream().map(this::LocationToLocationDTO).collect(Collectors.toList()));
 		result.setPhases(patient.getPhases().stream().map(this::PhaseToPhaseDTO).collect(Collectors.toList()));
-		result.setStates(patient.getStates().stream().map(this::StateToStateDTO).collect(Collectors.toList()));
 
 		return result;
 	}
@@ -52,7 +57,7 @@ public class AppPacFamController {
 	
 	private LocationDTO LocationToLocationDTO(Location location) {
 		LocationDTO locationDTO = new LocationDTO();
-		locationDTO.setIdLocation(location.getIdLocation());
+		locationDTO.setLocationId(location.getLocationId());
 		locationDTO.setName(location.getName());
 		locationDTO.setEntryTime(location.getEntryTime());
 		locationDTO.setDepartureTime(location.getDepartureTime());
@@ -62,7 +67,7 @@ public class AppPacFamController {
 	
 	private StateDTO StateToStateDTO(State state) {
 		StateDTO stateDTO = new StateDTO();
-		stateDTO.setIdState(state.getIdState());
+		stateDTO.setStateId(state.getIdState());
 		stateDTO.setName(state.getName());
 		stateDTO.setEntryTime(state.getEntryTime());
 		stateDTO.setDepartureTime(state.getDepartureTime());
@@ -72,20 +77,23 @@ public class AppPacFamController {
 	
 	private PhaseDTO PhaseToPhaseDTO(Phase phase) {
 		PhaseDTO phaseDTO = new PhaseDTO();
-		phaseDTO.setIdPhase(phase.getIdPhase());
+		phaseDTO.setPhaseId(phase.getIdPhase());
 		phaseDTO.setName(phase.getName());
 		phaseDTO.setEntryTime(phase.getEntryTime());
 		phaseDTO.setDepartureTime(phase.getDepartureTime());
+		phaseDTO.setStates(phase.getStates().stream().map(this::StateToStateDTO).collect(Collectors.toList()));
 
 		return phaseDTO;
 	}
 	
 	private Patient patientDTOtoPatient(PatientDTO patientDTO) {
 		Patient result = new Patient();
-		result.setIdPatient(patientDTO.getIdPatient());
+		result.setPatientId(patientDTO.getPatientId());
+		result.setPatientName(patientDTO.getPatientName());
+		result.setFirstSurname(patientDTO.getFirstSurname());
+		result.setSecondSurname(patientDTO.getSecondSurname());
 		result.setLocations(patientDTO.getLocations().stream().map(this::LocationDTOtoLocation).collect(Collectors.toList()));
 		result.setPhases(patientDTO.getPhases().stream().map(this::PhaseDTOtoPhase).collect(Collectors.toList()));
-		result.setStates(patientDTO.getStates().stream().map(this::StateDTOtoState).collect(Collectors.toList()));
 
 		return result;
 	}
@@ -93,7 +101,7 @@ public class AppPacFamController {
 	
 	private Location LocationDTOtoLocation(LocationDTO locationDTO) {
 		Location location = new Location();
-		location.setIdLocation(locationDTO.getIdLocation());
+		location.setLocationId(locationDTO.getLocationId());
 		location.setName(locationDTO.getName());
 		location.setEntryTime(locationDTO.getEntryTime());
 		location.setDepartureTime(locationDTO.getDepartureTime());
@@ -103,10 +111,11 @@ public class AppPacFamController {
 	
 	private Phase PhaseDTOtoPhase(PhaseDTO phaseDTO) {
 		Phase phase = new Phase();
-		phase.setIdPhase(phaseDTO.getIdPhase());
+		phase.setIdPhase(phaseDTO.getPhaseId());
 		phase.setName(phaseDTO.getName());
 		phase.setEntryTime(phaseDTO.getEntryTime());
 		phase.setDepartureTime(phaseDTO.getDepartureTime());
+		phase.setStates(phaseDTO.getStates().stream().map(this::StateDTOtoState).collect(Collectors.toList()));
 
 		return phase;
 	}
@@ -114,19 +123,12 @@ public class AppPacFamController {
 	
 	private State StateDTOtoState(StateDTO stateDTO) {
 		State state = new State();
-		state.setIdState(stateDTO.getIdState());
+		state.setIdState(stateDTO.getStateId());
 		state.setName(stateDTO.getName());
 		state.setEntryTime(stateDTO.getEntryTime());
 		state.setDepartureTime(stateDTO.getDepartureTime());
 
 		return state;
 	}
-	
-	
-	
-	
-
-	
-	
 
 }

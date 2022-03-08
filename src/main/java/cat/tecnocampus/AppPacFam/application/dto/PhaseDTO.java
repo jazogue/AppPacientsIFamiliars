@@ -1,28 +1,31 @@
 package cat.tecnocampus.AppPacFam.application.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class PhaseDTO {
-	@NotNull(message = "Email cannot be null")
-	@NotBlank(message = "Email cannot be blank")
-	private String idPhase;
+	@NotNull(message = "Id cannot be null")
+	@NotBlank(message = "Id cannot be blank")
+	private String phaseId;
 	private String name;
 	private LocalDateTime entryTime;
 	private LocalDateTime departureTime;
+	private List<StateDTO> states = new ArrayList<>();
 	
 	public PhaseDTO() {
 		
 	}
 
-	public String getIdPhase() {
-		return idPhase;
+	public String getPhaseId() {
+		return phaseId;
 	}
 
-	public void setIdPhase(String idPhase) {
-		this.idPhase = idPhase;
+	public void setPhaseId(String phaseId) {
+		this.phaseId = phaseId;
 	}
 
 	public String getName() {
@@ -48,6 +51,11 @@ public class PhaseDTO {
 	public void setDepartureTime(LocalDateTime departureTime) {
 		this.departureTime = departureTime;
 	}
-	
+	public List<StateDTO> getStates() {
+		return states;
+	}
+	public void setStates(List<StateDTO> states) {
+		this.states = states;
+	}
 	
 }

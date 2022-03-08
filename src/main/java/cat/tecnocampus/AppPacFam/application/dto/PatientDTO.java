@@ -8,22 +8,29 @@ import javax.validation.constraints.NotNull;
 
 public class PatientDTO {
 	
-	@NotNull(message = "Email cannot be null")
-	@NotBlank(message = "Email cannot be blank")
-	private String idPatient;
+	@NotNull(message = "Id cannot be null")
+	@NotBlank(message = "Id cannot be blank")
+	private String patientId;
+	@NotNull(message = "Name cannot be null")
+	@NotBlank(message = "Name cannot be blank")
+	private String patientName;
+	@NotNull(message = "First surname cannot be null")
+	@NotBlank(message = "First surname cannot be blank")
+	private String firstSurname;
+	private String secondSurname;
 	private List<LocationDTO> locations = new ArrayList<>();
 	private List<PhaseDTO> phases = new ArrayList<>();
-	private List<StateDTO> states = new ArrayList<>();
+
 	
 	public PatientDTO() {
 		
 	}
 	
-	public String getIdPatient() {
-		return idPatient;
+	public String getPatientId() {
+		return patientId;
 	}
-	public void setIdPatient(String idPatient) {
-		this.idPatient = idPatient;
+	public void setPatientId(String patientId) {
+		this.patientId = patientId;
 	}
 	public List<LocationDTO> getLocations() {
 		return locations;
@@ -37,12 +44,31 @@ public class PatientDTO {
 	public void setPhases(List<PhaseDTO> phases) {
 		this.phases = phases;
 	}
-	public List<StateDTO> getStates() {
-		return states;
+
+	public String getPatientName() {
+		return patientName;
 	}
-	public void setStates(List<StateDTO> states) {
-		this.states = states;
+
+	public void setPatientName(String patientName) {
+		this.patientName = patientName;
 	}
+
+	public String getFirstSurname() {
+		return firstSurname;
+	}
+
+	public void setFirstSurname(String firstSurname) {
+		this.firstSurname = firstSurname;
+	}
+
+	public String getSecondSurname() {
+		return secondSurname;
+	}
+
+	public void setSecondSurname(String secondSurname) {
+		this.secondSurname = secondSurname;
+	}
+	
 	
 	
 }
