@@ -63,6 +63,15 @@ public class Patient {
 		this.secondSurname = secondSurname;
 	}
 	
+	@Override
+    public String toString() {
+        return "Patient{" +
+                "patientId='" + patientId + '\'' +
+                ", patientName=" + patientName +
+                ", firstSurname='" + firstSurname + '\'' +
+                ", secondSurname=" + secondSurname +
+                '}';
+    }
 	
 	
 }

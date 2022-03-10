@@ -11,15 +11,25 @@ import cat.tecnocampus.AppPacFam.domain.State;
 
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service //same as @Component
 public class AppPacFamController {
 	private PatientDAO patientDAO;
+	private LocationDAO locationDAO;
+	private PhaseDAO phaseDAO;
+	private StateDAO stateDAO;
 
-	public AppPacFamController(PatientDAO patientDAO) {
+	public AppPacFamController(PatientDAO patientDAO, LocationDAO locationDAO, PhaseDAO phaseDAO, StateDAO stateDAO) {
 		this.patientDAO = patientDAO;
+		this.locationDAO = locationDAO;
+		this.phaseDAO = phaseDAO;
+		this.stateDAO = stateDAO;
 	}
 
 	public PatientDTO getPatientById(String id) {
@@ -27,16 +37,46 @@ public class AppPacFamController {
 	}
 	
 	public List<LocationDTO> getLocationsByPatientId(String id) {
-		return patientDAO.getLocationsByPatientId(id);
+		return locationDAO.getLocationsByPatientId(id);
 	}
 	
 	public List<PhaseDTO> getPhasesByPatientId(String id) {
-		return patientDAO.getPhasesByPatientId(id);
+		return phaseDAO.getPhasesByPatientId(id);
 	}
 	
-	public List<StateDTO> getStatesByPatientId(String id) {
-		return patientDAO.getStatesByPatientId(id);
+	public List<StateDTO> getStatesByPhaseId(String id) {
+		return stateDAO.getStatesByPhaseId(id);
 	}
+	
+	public PatientDTO getPatientSummaryById(String id) {
+		PatientDTO patientDto = new PatientDTO();
+		patientDto = patientDAO.getPatientById(id);
+		patientDto.setLocations(locationDAO.getLocationsByPatientId(id));
+		patientDto.setPhases(phaseDAO.getPhasesByPatientId(id));
+		patientDto.setPhases(initializeStatesOfPhases(patientDto.getPhases()));
+
+		return patientDto;
+	}
+	
+	/*
+	public List<LocationDTO> getLocationsFromSpecificDateTimePatientId(String id, String dateTimeNow) {
+		Date dateNow = null, dateBefore = null;
+		List<LocationDTO> locations = locationDAO.getLocationsByPatientId(id);
+		SimpleDateFormat dateParser = new SimpleDateFormat("MM-dd-yy HH:mm:ss");
+		
+		
+		 try {
+             dateNow = dateParser.parse(dateTimeNow);
+             dateBefore = dateParser.parse(locations.get(0).getEntryTime());
+             }  catch (ParseException e) {
+             }
+		 
+		 if(dateBefore.after(dateNow))
+			 return new ArrayList<LocationDTO>();
+		return locationDAO.getLocationsFromSpecificDateTimePatientId(id, dateTimeNow, locations.get(0).getDepartureTime());
+	}
+	*/
+
 
 
 	//******************
@@ -58,7 +98,7 @@ public class AppPacFamController {
 	private LocationDTO LocationToLocationDTO(Location location) {
 		LocationDTO locationDTO = new LocationDTO();
 		locationDTO.setLocationId(location.getLocationId());
-		locationDTO.setName(location.getName());
+		locationDTO.setLocationName(location.getLocationName());
 		locationDTO.setEntryTime(location.getEntryTime());
 		locationDTO.setDepartureTime(location.getDepartureTime());
 
@@ -68,9 +108,8 @@ public class AppPacFamController {
 	private StateDTO StateToStateDTO(State state) {
 		StateDTO stateDTO = new StateDTO();
 		stateDTO.setStateId(state.getIdState());
-		stateDTO.setName(state.getName());
+		stateDTO.setStateName(state.getStateName());
 		stateDTO.setEntryTime(state.getEntryTime());
-		stateDTO.setDepartureTime(state.getDepartureTime());
 
 		return stateDTO;
 	}
@@ -78,9 +117,9 @@ public class AppPacFamController {
 	private PhaseDTO PhaseToPhaseDTO(Phase phase) {
 		PhaseDTO phaseDTO = new PhaseDTO();
 		phaseDTO.setPhaseId(phase.getIdPhase());
-		phaseDTO.setName(phase.getName());
-		phaseDTO.setEntryTime(phase.getEntryTime());
-		phaseDTO.setDepartureTime(phase.getDepartureTime());
+		phaseDTO.setPhaseName(phase.getPhaseName());
+		phaseDTO.setStartTime(phase.getStartTime());
+		phaseDTO.setFinishedTime(phase.getFinishedTime());
 		phaseDTO.setStates(phase.getStates().stream().map(this::StateToStateDTO).collect(Collectors.toList()));
 
 		return phaseDTO;
@@ -102,7 +141,7 @@ public class AppPacFamController {
 	private Location LocationDTOtoLocation(LocationDTO locationDTO) {
 		Location location = new Location();
 		location.setLocationId(locationDTO.getLocationId());
-		location.setName(locationDTO.getName());
+		location.setLocationName(locationDTO.getLocationName());
 		location.setEntryTime(locationDTO.getEntryTime());
 		location.setDepartureTime(locationDTO.getDepartureTime());
 
@@ -112,9 +151,9 @@ public class AppPacFamController {
 	private Phase PhaseDTOtoPhase(PhaseDTO phaseDTO) {
 		Phase phase = new Phase();
 		phase.setIdPhase(phaseDTO.getPhaseId());
-		phase.setName(phaseDTO.getName());
-		phase.setEntryTime(phaseDTO.getEntryTime());
-		phase.setDepartureTime(phaseDTO.getDepartureTime());
+		phase.setPhaseName(phaseDTO.getPhaseName());
+		phase.setStartTime(phaseDTO.getStartTime());
+		phase.setFinishedTime(phaseDTO.getFinishedTime());
 		phase.setStates(phaseDTO.getStates().stream().map(this::StateDTOtoState).collect(Collectors.toList()));
 
 		return phase;
@@ -124,11 +163,19 @@ public class AppPacFamController {
 	private State StateDTOtoState(StateDTO stateDTO) {
 		State state = new State();
 		state.setIdState(stateDTO.getStateId());
-		state.setName(stateDTO.getName());
+		state.setStateName(stateDTO.getStateName());
 		state.setEntryTime(stateDTO.getEntryTime());
-		state.setDepartureTime(stateDTO.getDepartureTime());
 
 		return state;
 	}
 
+
+	private List<PhaseDTO>  initializeStatesOfPhases(List<PhaseDTO> phases) {
+		for (int i=0;i<phases.size();i++) {
+			phases.get(i).setStates(stateDAO.getStatesByPhaseId(phases.get(i).getPhaseId()));
+		}
+		return phases;
+	}
+
+	
 }

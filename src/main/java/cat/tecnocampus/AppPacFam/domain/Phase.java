@@ -2,13 +2,14 @@ package cat.tecnocampus.AppPacFam.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Phase {
 	private String idPhase;
-	private String name;
-	private LocalDateTime entryTime;
-	private LocalDateTime departureTime;
+	private String phaseName;
+	private Date startTime;
+	private Date finishedTime;
 	private List<State> states = new ArrayList<>();
 	
 	public Phase() {
@@ -23,28 +24,28 @@ public class Phase {
 		this.idPhase = idPhase;
 	}
 
-	public String getName() {
-		return name;
+	public String getPhaseName() {
+		return phaseName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPhaseName(String phaseName) {
+		this.phaseName = phaseName;
 	}
 
-	public LocalDateTime getEntryTime() {
-		return entryTime;
+	public Date getStartTime() {
+		return startTime;
 	}
 
-	public void setEntryTime(LocalDateTime entryTime) {
-		this.entryTime = entryTime;
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
 	}
 
-	public LocalDateTime getDepartureTime() {
-		return departureTime;
+	public Date getFinishedTime() {
+		return finishedTime;
 	}
 
-	public void setDepartureTime(LocalDateTime departureTime) {
-		this.departureTime = departureTime;
+	public void setFinishedTime(Date finishedTime) {
+		this.finishedTime = finishedTime;
 	}
 	
 	public List<State> getStates() {

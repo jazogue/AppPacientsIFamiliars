@@ -10,34 +10,34 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import cat.tecnocampus.AppPacFam.application.dto.LocationDTO;
-import cat.tecnocampus.AppPacFam.application.dto.PatientDTO;
-import cat.tecnocampus.AppPacFam.application.dto.PhaseDTO;
 import cat.tecnocampus.AppPacFam.application.dto.StateDTO;
 import cat.tecnocampus.AppPacFam.application.exception.PatientNotFoundException;
 
-
 @Repository // @Component
-public class PatientDAO implements cat.tecnocampus.AppPacFam.application.PatientDAO {
+public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO {
 
 	private JdbcTemplate jdbcTemplate;
 
-	public PatientDAO(JdbcTemplate jdbcTemplate) {
+	public StateDAO(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	ResultSetExtractorImpl<PatientDTO> patientsRowMapper = JdbcTemplateMapperFactory.newInstance().addKeys("patientId")
-			.newResultSetExtractor(PatientDTO.class);
-	
-	RowMapperImpl<PatientDTO> patientRowMapper = JdbcTemplateMapperFactory.newInstance().addKeys("patientId")
-			.newRowMapper(PatientDTO.class);
+	ResultSetExtractorImpl<StateDTO> locationsRowMapper = JdbcTemplateMapperFactory.newInstance()
+			.addKeys("stateId").newResultSetExtractor(StateDTO.class);
+
+	RowMapperImpl<StateDTO> locationRowMapper = JdbcTemplateMapperFactory.newInstance().addKeys("stateId")
+			.newRowMapper(StateDTO.class);
+
 
 	@Override
-	public PatientDTO getPatientById(String id) {
-		final var query = "select * from patient where patientId = ?";
+	public List<StateDTO> getStatesByPhaseId(String id) {
+		final var query = "select stateId, stateName, entryTime from state where phaseId = ?";
 		try {
-			return jdbcTemplate.queryForObject(query, patientRowMapper, id);
+			var result = jdbcTemplate.query(query, locationsRowMapper, id);
+			return result;
 		} catch (EmptyResultDataAccessException e) {
 			throw new PatientNotFoundException(id);
 		}
 	}
+
 }

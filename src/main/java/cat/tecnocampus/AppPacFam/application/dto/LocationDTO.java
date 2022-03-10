@@ -1,6 +1,7 @@
 package cat.tecnocampus.AppPacFam.application.dto;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -9,9 +10,9 @@ public class LocationDTO {
 	@NotNull(message = "Id cannot be null")
 	@NotBlank(message = "Id cannot be blank")
 	private String locationId;
-	private String name;
-	private LocalDateTime entryTime;
-	private LocalDateTime departureTime;
+	private String locationName;
+	private Date entryTime;
+	private Date departureTime;
 	
 	public LocationDTO() {
 		
@@ -25,27 +26,27 @@ public class LocationDTO {
 		this.locationId = locationId;
 	}
 
-	public String getName() {
-		return name;
+	public String getLocationName() {
+		return locationName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
 	}
 
-	public LocalDateTime getEntryTime() {
+	public Date getEntryTime() {
 		return entryTime;
 	}
 
-	public void setEntryTime(LocalDateTime entryTime) {
+	public void setEntryTime(Date entryTime) {
 		this.entryTime = entryTime;
 	}
 
-	public LocalDateTime getDepartureTime() {
+	public Date getDepartureTime() {
 		return departureTime;
 	}
 
-	public void setDepartureTime(LocalDateTime departureTime) {
+	public void setDepartureTime(Date departureTime) {
 		this.departureTime = departureTime;
 	}
 	

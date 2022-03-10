@@ -1,12 +1,13 @@
 package cat.tecnocampus.AppPacFam.domain;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Location {
 	private String locationId;
-	private String name;
-	private LocalDateTime entryTime;
-	private LocalDateTime departureTime;
+	private String LocationName;
+	private Date entryTime;
+	private Date departureTime;
 	
 	public Location() {
 		
@@ -20,28 +21,29 @@ public class Location {
 		this.locationId = locationId;
 	}
 
-	public String getName() {
-		return name;
+	public String getLocationName() {
+		return LocationName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setLocationName(String LocationName) {
+		this.LocationName = LocationName;
 	}
 
-	public LocalDateTime getEntryTime() {
+	public Date getEntryTime() {
 		return entryTime;
 	}
 
-	public void setEntryTime(LocalDateTime entryTime) {
+	public void setEntryTime(Date entryTime) {
 		this.entryTime = entryTime;
 	}
 
-	public LocalDateTime getDepartureTime() {
+	public Date getDepartureTime() {
 		return departureTime;
 	}
 
-	public void setDepartureTime(LocalDateTime departureTime) {
+	public void setDepartureTime(Date departureTime) {
 		this.departureTime = departureTime;
 	}
+
 	
 }

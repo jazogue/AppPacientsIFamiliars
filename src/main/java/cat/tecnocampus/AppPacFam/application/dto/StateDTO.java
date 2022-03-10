@@ -1,6 +1,7 @@
 package cat.tecnocampus.AppPacFam.application.dto;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -9,9 +10,8 @@ public class StateDTO {
 	@NotNull(message = "Id cannot be null")
 	@NotBlank(message = "Id cannot be blank")
 	private String stateId;
-	private String name;
-	private LocalDateTime entryTime;
-	private LocalDateTime departureTime;
+	private String stateName;
+	private Date entryTime;
 	
 	public StateDTO() {
 		
@@ -25,29 +25,22 @@ public class StateDTO {
 		this.stateId = stateId;
 	}
 
-	public String getName() {
-		return name;
+	public String getStateName() {
+		return stateName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setStateName(String stateName) {
+		this.stateName = stateName;
 	}
 
-	public LocalDateTime getEntryTime() {
+	public Date getEntryTime() {
 		return entryTime;
 	}
 
-	public void setEntryTime(LocalDateTime entryTime) {
+	public void setEntryTime(Date entryTime) {
 		this.entryTime = entryTime;
 	}
 
-	public LocalDateTime getDepartureTime() {
-		return departureTime;
-	}
-
-	public void setDepartureTime(LocalDateTime departureTime) {
-		this.departureTime = departureTime;
-	}
 	
 	
 }

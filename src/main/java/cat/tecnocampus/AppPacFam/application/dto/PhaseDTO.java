@@ -2,6 +2,7 @@ package cat.tecnocampus.AppPacFam.application.dto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
@@ -11,9 +12,9 @@ public class PhaseDTO {
 	@NotNull(message = "Id cannot be null")
 	@NotBlank(message = "Id cannot be blank")
 	private String phaseId;
-	private String name;
-	private LocalDateTime entryTime;
-	private LocalDateTime departureTime;
+	private String phaseName;
+	private Date startTime;
+	private Date finishedTime;
 	private List<StateDTO> states = new ArrayList<>();
 	
 	public PhaseDTO() {
@@ -28,28 +29,28 @@ public class PhaseDTO {
 		this.phaseId = phaseId;
 	}
 
-	public String getName() {
-		return name;
+	public String getPhaseName() {
+		return phaseName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPhaseName(String phaseName) {
+		this.phaseName = phaseName;
 	}
 
-	public LocalDateTime getEntryTime() {
-		return entryTime;
+	public Date getStartTime() {
+		return startTime;
 	}
 
-	public void setEntryTime(LocalDateTime entryTime) {
-		this.entryTime = entryTime;
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
 	}
 
-	public LocalDateTime getDepartureTime() {
-		return departureTime;
+	public Date getFinishedTime() {
+		return finishedTime;
 	}
 
-	public void setDepartureTime(LocalDateTime departureTime) {
-		this.departureTime = departureTime;
+	public void setFinishedTime(Date finishedTime) {
+		this.finishedTime = finishedTime;
 	}
 	public List<StateDTO> getStates() {
 		return states;
