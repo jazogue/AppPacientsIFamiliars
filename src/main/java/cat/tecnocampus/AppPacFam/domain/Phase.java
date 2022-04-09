@@ -9,6 +9,7 @@ public class Phase {
 	private String phaseName;
 	private Date startTime;
 	private Date finishedTime;
+	private int hospitalCareType;
 	private List<State> states = new ArrayList<>();
 
 	public Phase() {
@@ -53,6 +54,14 @@ public class Phase {
 
 	public void setStates(List<State> states) {
 		this.states = states;
+	}
+
+	public int getHospitalCareType() {
+		return hospitalCareType;
+	}
+
+	public void setHospitalCareType(int hospitalCareType) {
+		this.hospitalCareType = hospitalCareType;
 	}
 
 }

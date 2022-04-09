@@ -86,14 +86,29 @@ public class PatientRestController {
 		return appPacFamController.getStates();
 	}
 	
-	@GetMapping("/phase/states/{id}")
+	@GetMapping("/states/phase/{id}")
 	public List<StateDTO> getStatesByPhaseId(@PathVariable String id) {
 		return appPacFamController.getStatesByPhaseId(id);
+	}
+	
+	@GetMapping("/states/patient/{id}")
+	public List<StateDTO> getStatesByPatientId(@PathVariable String id) {
+		return appPacFamController.getStatesByPatientId(id);
+	}
+	
+	@GetMapping("/states/patient/{id}/new/int")
+	public int getManyNewStatesByPatientId(@PathVariable String id) {
+		return appPacFamController.getManyNewStatesByPatientId(id);
+	}
+
+	@GetMapping("/states/patient/{id}/new/object")
+	public List<StateDTO> getNewStatesByPatientId(@PathVariable String id) {
+		return appPacFamController.getNewStatesByPatientId(id);
 	}
 
 	@GetMapping("/patient/summary/{id}")
 	public PatientDTO getPatientSummaryById(@PathVariable String id) {
 		return appPacFamController.getPatientSummaryById(id);
 	}
-
+	
 }

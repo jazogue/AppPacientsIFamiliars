@@ -15,6 +15,7 @@ public class PhaseDTO {
 	private String phaseName;
 	private Date startTime;
 	private Date finishedTime;
+	private int hospitalCareType;
 	private List<StateDTO> states = new ArrayList<>();
 
 	public PhaseDTO() {
@@ -59,6 +60,14 @@ public class PhaseDTO {
 
 	public void setStates(List<StateDTO> states) {
 		this.states = states;
+	}
+
+	public int getHospitalCareType() {
+		return hospitalCareType;
+	}
+
+	public void setHospitalCareType(int hospitalCareType) {
+		this.hospitalCareType = hospitalCareType;
 	}
 
 }

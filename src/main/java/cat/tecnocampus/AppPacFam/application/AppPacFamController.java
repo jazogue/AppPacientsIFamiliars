@@ -95,9 +95,21 @@ public class AppPacFamController {
 	}
 
 	public List<StateDTO> getStates() {
-		// TODO Auto-generated method stub
 		return stateDAO.getStates();
 	}
+	
+	public List<StateDTO> getStatesByPatientId(String id) {
+		return stateDAO.getStatesByPatientId(id);
+	}
+	
+	public int getManyNewStatesByPatientId(String id) {
+		return stateDAO.getManyNewStatesByPatientId(id);
+	}
+
+	public List<StateDTO> getNewStatesByPatientId(String id) {
+		return stateDAO.getNewStatesByPatientId(id);
+	}
+
 	
 	// ******************
 
@@ -193,5 +205,8 @@ public class AppPacFamController {
 		}
 		return phases;
 	}
+
+	
+	
 
 }
