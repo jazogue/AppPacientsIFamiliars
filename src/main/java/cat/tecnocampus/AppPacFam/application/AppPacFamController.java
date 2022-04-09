@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service //same as @Component
+@Service // same as @Component
 public class AppPacFamController {
 	private PatientDAO patientDAO;
 	private LocationDAO locationDAO;
@@ -32,22 +32,34 @@ public class AppPacFamController {
 		this.stateDAO = stateDAO;
 	}
 
+	public List<PatientDTO> getPatients() {
+		return patientDAO.getPatients();
+	}
+
 	public PatientDTO getPatientById(String id) {
 		return patientDAO.getPatientById(id);
 	}
-	
+
+	public List<LocationDTO> getLocations() {
+		return locationDAO.getLocations();
+	}
+
 	public List<LocationDTO> getLocationsByPatientId(String id) {
 		return locationDAO.getLocationsByPatientId(id);
 	}
-	
+
+	public List<PhaseDTO> getPhases() {
+		return phaseDAO.getPhases();
+	}
+
 	public List<PhaseDTO> getPhasesByPatientId(String id) {
 		return phaseDAO.getPhasesByPatientId(id);
 	}
-	
+
 	public List<StateDTO> getStatesByPhaseId(String id) {
 		return stateDAO.getStatesByPhaseId(id);
 	}
-	
+
 	public PatientDTO getPatientSummaryById(String id) {
 		PatientDTO patientDto = new PatientDTO();
 		patientDto = patientDAO.getPatientById(id);
@@ -57,44 +69,51 @@ public class AppPacFamController {
 
 		return patientDto;
 	}
-	
-	/*
-	public List<LocationDTO> getLocationsFromSpecificDateTimePatientId(String id, String dateTimeNow) {
-		Date dateNow = null, dateBefore = null;
-		List<LocationDTO> locations = locationDAO.getLocationsByPatientId(id);
-		SimpleDateFormat dateParser = new SimpleDateFormat("MM-dd-yy HH:mm:ss");
-		
-		
-		 try {
-             dateNow = dateParser.parse(dateTimeNow);
-             dateBefore = dateParser.parse(locations.get(0).getEntryTime());
-             }  catch (ParseException e) {
-             }
-		 
-		 if(dateBefore.after(dateNow))
-			 return new ArrayList<LocationDTO>();
-		return locationDAO.getLocationsFromSpecificDateTimePatientId(id, dateTimeNow, locations.get(0).getDepartureTime());
+
+	public int getManyNewPatients() {
+		return patientDAO.getManyNewPatients();
 	}
-	*/
 
+	public List<PatientDTO> getNewPatients() {
+		return patientDAO.getNewPatients();
+	}
 
+	public List<LocationDTO> getNewLocationsByPatientId(String id) {
+		return locationDAO.getNewLocationsByPatientId(id);
+	}
 
-	//******************
+	public int getManyNewLocationsByPatientId(String id) {
+		return locationDAO.getManyNewLocationsByPatientId(id);
+	}
+
+	public int getManyNewPhasesByPatientId(String id) {
+		return phaseDAO.getManyNewPhasesByPatientId(id);
+	}
+
+	public List<PhaseDTO> getNewPhasesByPatientId(String id) {
+		return phaseDAO.getNewPhasesByPatientId(id);
+	}
+
+	public List<StateDTO> getStates() {
+		// TODO Auto-generated method stub
+		return stateDAO.getStates();
+	}
 	
-	
+	// ******************
+
 	private PatientDTO patientToPatientDTO(Patient patient) {
 		PatientDTO result = new PatientDTO();
 		result.setPatientId(patient.getPatientId());
 		result.setPatientName(patient.getPatientName());
 		result.setFirstSurname(patient.getFirstSurname());
 		result.setSecondSurname(patient.getSecondSurname());
-		result.setLocations(patient.getLocations().stream().map(this::LocationToLocationDTO).collect(Collectors.toList()));
+		result.setLocations(
+				patient.getLocations().stream().map(this::LocationToLocationDTO).collect(Collectors.toList()));
 		result.setPhases(patient.getPhases().stream().map(this::PhaseToPhaseDTO).collect(Collectors.toList()));
 
 		return result;
 	}
-	
-	
+
 	private LocationDTO LocationToLocationDTO(Location location) {
 		LocationDTO locationDTO = new LocationDTO();
 		locationDTO.setLocationId(location.getLocationId());
@@ -104,16 +123,16 @@ public class AppPacFamController {
 
 		return locationDTO;
 	}
-	
+
 	private StateDTO StateToStateDTO(State state) {
 		StateDTO stateDTO = new StateDTO();
-		stateDTO.setStateId(state.getIdState());
+		stateDTO.setStateId(state.getStateId());
 		stateDTO.setStateName(state.getStateName());
-		stateDTO.setEntryTime(state.getEntryTime());
+		stateDTO.setStartTime(state.getStartTime());
 
 		return stateDTO;
 	}
-	
+
 	private PhaseDTO PhaseToPhaseDTO(Phase phase) {
 		PhaseDTO phaseDTO = new PhaseDTO();
 		phaseDTO.setPhaseId(phase.getIdPhase());
@@ -124,20 +143,20 @@ public class AppPacFamController {
 
 		return phaseDTO;
 	}
-	
+
 	private Patient patientDTOtoPatient(PatientDTO patientDTO) {
 		Patient result = new Patient();
 		result.setPatientId(patientDTO.getPatientId());
 		result.setPatientName(patientDTO.getPatientName());
 		result.setFirstSurname(patientDTO.getFirstSurname());
 		result.setSecondSurname(patientDTO.getSecondSurname());
-		result.setLocations(patientDTO.getLocations().stream().map(this::LocationDTOtoLocation).collect(Collectors.toList()));
+		result.setLocations(
+				patientDTO.getLocations().stream().map(this::LocationDTOtoLocation).collect(Collectors.toList()));
 		result.setPhases(patientDTO.getPhases().stream().map(this::PhaseDTOtoPhase).collect(Collectors.toList()));
 
 		return result;
 	}
-	
-	
+
 	private Location LocationDTOtoLocation(LocationDTO locationDTO) {
 		Location location = new Location();
 		location.setLocationId(locationDTO.getLocationId());
@@ -147,7 +166,7 @@ public class AppPacFamController {
 
 		return location;
 	}
-	
+
 	private Phase PhaseDTOtoPhase(PhaseDTO phaseDTO) {
 		Phase phase = new Phase();
 		phase.setIdPhase(phaseDTO.getPhaseId());
@@ -158,24 +177,21 @@ public class AppPacFamController {
 
 		return phase;
 	}
-	
-	
+
 	private State StateDTOtoState(StateDTO stateDTO) {
 		State state = new State();
-		state.setIdState(stateDTO.getStateId());
+		state.setStateId(stateDTO.getStateId());
 		state.setStateName(stateDTO.getStateName());
-		state.setEntryTime(stateDTO.getEntryTime());
+		state.setStartTime(stateDTO.getStartTime());
 
 		return state;
 	}
 
-
-	private List<PhaseDTO>  initializeStatesOfPhases(List<PhaseDTO> phases) {
-		for (int i=0;i<phases.size();i++) {
+	private List<PhaseDTO> initializeStatesOfPhases(List<PhaseDTO> phases) {
+		for (int i = 0; i < phases.size(); i++) {
 			phases.get(i).setStates(stateDAO.getStatesByPhaseId(phases.get(i).getPhaseId()));
 		}
 		return phases;
 	}
 
-	
 }

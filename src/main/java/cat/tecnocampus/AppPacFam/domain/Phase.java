@@ -1,6 +1,5 @@
 package cat.tecnocampus.AppPacFam.domain;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,9 +10,9 @@ public class Phase {
 	private Date startTime;
 	private Date finishedTime;
 	private List<State> states = new ArrayList<>();
-	
+
 	public Phase() {
-		
+
 	}
 
 	public String getIdPhase() {
@@ -47,7 +46,7 @@ public class Phase {
 	public void setFinishedTime(Date finishedTime) {
 		this.finishedTime = finishedTime;
 	}
-	
+
 	public List<State> getStates() {
 		return states;
 	}
@@ -55,6 +54,5 @@ public class Phase {
 	public void setStates(List<State> states) {
 		this.states = states;
 	}
-	
-	
+
 }

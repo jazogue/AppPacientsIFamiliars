@@ -8,4 +8,6 @@ public interface StateDAO {
 	
 	List<StateDTO> getStatesByPhaseId(String id);
 
+	List<StateDTO> getStates();
+
 }

@@ -22,12 +22,11 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	ResultSetExtractorImpl<StateDTO> locationsRowMapper = JdbcTemplateMapperFactory.newInstance()
-			.addKeys("stateId").newResultSetExtractor(StateDTO.class);
+	ResultSetExtractorImpl<StateDTO> locationsRowMapper = JdbcTemplateMapperFactory.newInstance().addKeys("stateId")
+			.newResultSetExtractor(StateDTO.class);
 
 	RowMapperImpl<StateDTO> locationRowMapper = JdbcTemplateMapperFactory.newInstance().addKeys("stateId")
 			.newRowMapper(StateDTO.class);
-
 
 	@Override
 	public List<StateDTO> getStatesByPhaseId(String id) {
@@ -38,6 +37,14 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 		} catch (EmptyResultDataAccessException e) {
 			throw new PatientNotFoundException(id);
 		}
+	}
+
+	@Override
+	public List<StateDTO> getStates() {
+		final var query = "select stateId, stateName, entryTime from state";
+
+		var result = jdbcTemplate.query(query, locationsRowMapper);
+		return result;
 	}
 
 }

@@ -10,9 +10,9 @@ public class Patient {
 	private String secondSurname;
 	private List<Location> locations = new ArrayList<>();
 	private List<Phase> phases = new ArrayList<>();
-	
+
 	public Patient() {
-		
+
 	}
 
 	public String getPatientId() {
@@ -62,16 +62,11 @@ public class Patient {
 	public void setSecondSurname(String secondSurname) {
 		this.secondSurname = secondSurname;
 	}
-	
+
 	@Override
-    public String toString() {
-        return "Patient{" +
-                "patientId='" + patientId + '\'' +
-                ", patientName=" + patientName +
-                ", firstSurname='" + firstSurname + '\'' +
-                ", secondSurname=" + secondSurname +
-                '}';
-    }
-	
-	
+	public String toString() {
+		return "Patient{" + "patientId='" + patientId + '\'' + ", patientName=" + patientName + ", firstSurname='"
+				+ firstSurname + '\'' + ", secondSurname=" + secondSurname + '}';
+	}
+
 }

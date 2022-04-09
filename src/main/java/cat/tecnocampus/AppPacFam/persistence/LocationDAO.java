@@ -8,9 +8,11 @@ import org.simpleflatmapper.jdbc.spring.ResultSetExtractorImpl;
 import org.simpleflatmapper.jdbc.spring.RowMapperImpl;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import cat.tecnocampus.AppPacFam.application.dto.LocationDTO;
+import cat.tecnocampus.AppPacFam.application.dto.PatientDTO;
 import cat.tecnocampus.AppPacFam.application.exception.PatientNotFoundException;
 
 @Repository // @Component
@@ -22,6 +24,17 @@ public class LocationDAO implements cat.tecnocampus.AppPacFam.application.Locati
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
+	private final RowMapper<LocationDTO> locationRowMapperLazy = (resultSet, i) -> {
+		LocationDTO location = new LocationDTO();
+
+		location.setLocationId(resultSet.getString("locationId"));
+		location.setLocationName(resultSet.getString("locationName"));
+		location.setEntryTime(resultSet.getDate("entryTime"));
+		location.setDepartureTime(resultSet.getDate("departureTime"));
+
+		return location;
+	};
+
 	ResultSetExtractorImpl<LocationDTO> locationsRowMapper = JdbcTemplateMapperFactory.newInstance()
 			.addKeys("locationId").newResultSetExtractor(LocationDTO.class);
 
@@ -29,28 +42,42 @@ public class LocationDAO implements cat.tecnocampus.AppPacFam.application.Locati
 			.newRowMapper(LocationDTO.class);
 
 	@Override
+	public List<LocationDTO> getLocations() {
+		final var query = "SELECT locationId, locationName, entryTime, departureTime FROM location";
+
+		var result = jdbcTemplate.query(query, locationsRowMapper);
+		return result;
+	}
+
+	@Override
 	public List<LocationDTO> getLocationsByPatientId(String id) {
-		final var query = "select locationId, locationName, entryTime, departureTime from location where patientId = ? order by departureTime";
+		final var query = "select * from location where patientId = ?";
 		try {
-			var result = jdbcTemplate.query(query, locationsRowMapper, id);
+			var result = jdbcTemplate.query(query, locationRowMapperLazy, id);
 			return result;
 		} catch (EmptyResultDataAccessException e) {
 			throw new PatientNotFoundException(id);
 		}
 	}
 
-	/*
 	@Override
-	public List<LocationDTO> getLocationsFromSpecificDateTimePatientId(String id, String dateTimeNow, String dateTimeLast) {
-		SELECT * FROM table WHERE value BETWEEN '15' AND '16' ORDER BY id, time
-		final var query = "select locationId, locationName, entryTime, departureTime from location where patientId = " + id + "";
-		try {
-			var result = jdbcTemplate.query(query, locationsRowMapper, id);
-			return result;
-		} catch (EmptyResultDataAccessException e) {
-			throw new PatientNotFoundException(id);
-		}
+	public int getManyNewLocationsByPatientId(String id) {
+		final var query = "SELECT COUNT(checked) FROM location WHERE (checked = FALSE AND patientId = ?);";
+
+		return jdbcTemplate.queryForObject(query, Integer.class, id);
 	}
-	*/
+
+	@Override
+	public List<LocationDTO> getNewLocationsByPatientId(String id) {
+		final var query = "SELECT locationId, locationName, entryTime, departureTime"
+				+ " FROM location WHERE (checked = FALSE AND patientId = ?) FOR UPDATE;";
+
+		List<LocationDTO> locations = jdbcTemplate.query(query, locationsRowMapper, id);
+
+		final var queryUpdate = "UPDATE location SET checked = TRUE WHERE (checked = FALSE AND patientId = ?);";
+		jdbcTemplate.update(queryUpdate, id);
+
+		return locations;
+	}
 
 }

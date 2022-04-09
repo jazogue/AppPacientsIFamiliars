@@ -8,9 +8,9 @@ public class Location {
 	private String LocationName;
 	private Date entryTime;
 	private Date departureTime;
-	
+
 	public Location() {
-		
+
 	}
 
 	public String getLocationId() {
@@ -45,5 +45,4 @@ public class Location {
 		this.departureTime = departureTime;
 	}
 
-	
 }

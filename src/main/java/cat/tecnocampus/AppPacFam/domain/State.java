@@ -1,23 +1,22 @@
 package cat.tecnocampus.AppPacFam.domain;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public class State {
-	private String idState;
+	private String stateId;
 	private String stateName;
-	private Date entryTime;
+	private Date startTime;
 	
 	public State() {
-		
+
 	}
 
-	public String getIdState() {
-		return idState;
+	public String getStateId() {
+		return stateId;
 	}
 
-	public void setIdState(String idState) {
-		this.idState = idState;
+	public void setStateId(String stateId) {
+		this.stateId = stateId;
 	}
 
 	public String getStateName() {
@@ -28,13 +27,12 @@ public class State {
 		this.stateName = stateName;
 	}
 
-	public Date getEntryTime() {
-		return entryTime;
+	public Date getStartTime() {
+		return startTime;
 	}
 
-	public void setEntryTime(Date entryTime) {
-		this.entryTime = entryTime;
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
 	}
-	
-	
+
 }

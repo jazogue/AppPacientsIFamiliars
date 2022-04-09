@@ -16,9 +16,9 @@ public class PhaseDTO {
 	private Date startTime;
 	private Date finishedTime;
 	private List<StateDTO> states = new ArrayList<>();
-	
+
 	public PhaseDTO() {
-		
+
 	}
 
 	public String getPhaseId() {
@@ -52,11 +52,13 @@ public class PhaseDTO {
 	public void setFinishedTime(Date finishedTime) {
 		this.finishedTime = finishedTime;
 	}
+
 	public List<StateDTO> getStates() {
 		return states;
 	}
+
 	public void setStates(List<StateDTO> states) {
 		this.states = states;
 	}
-	
+
 }

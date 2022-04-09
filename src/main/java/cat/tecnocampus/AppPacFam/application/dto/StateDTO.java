@@ -11,10 +11,10 @@ public class StateDTO {
 	@NotBlank(message = "Id cannot be blank")
 	private String stateId;
 	private String stateName;
-	private Date entryTime;
-	
+	private Date startTime;
+
 	public StateDTO() {
-		
+
 	}
 
 	public String getStateId() {
@@ -33,14 +33,12 @@ public class StateDTO {
 		this.stateName = stateName;
 	}
 
-	public Date getEntryTime() {
-		return entryTime;
+	public Date getStartTime() {
+		return startTime;
 	}
 
-	public void setEntryTime(Date entryTime) {
-		this.entryTime = entryTime;
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
 	}
 
-	
-	
 }

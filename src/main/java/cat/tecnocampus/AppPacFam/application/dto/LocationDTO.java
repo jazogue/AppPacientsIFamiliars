@@ -13,9 +13,9 @@ public class LocationDTO {
 	private String locationName;
 	private Date entryTime;
 	private Date departureTime;
-	
+
 	public LocationDTO() {
-		
+
 	}
 
 	public String getLocationId() {
@@ -49,6 +49,5 @@ public class LocationDTO {
 	public void setDepartureTime(Date departureTime) {
 		this.departureTime = departureTime;
 	}
-	
-	
+
 }

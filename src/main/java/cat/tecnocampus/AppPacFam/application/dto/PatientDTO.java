@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class PatientDTO {
-	
+
 	@NotNull(message = "Id cannot be null")
 	@NotBlank(message = "Id cannot be blank")
 	private String patientId;
@@ -21,26 +21,30 @@ public class PatientDTO {
 	private List<LocationDTO> locations = new ArrayList<>();
 	private List<PhaseDTO> phases = new ArrayList<>();
 
-	
 	public PatientDTO() {
-		
+
 	}
-	
+
 	public String getPatientId() {
 		return patientId;
 	}
+
 	public void setPatientId(String patientId) {
 		this.patientId = patientId;
 	}
+
 	public List<LocationDTO> getLocations() {
 		return locations;
 	}
+
 	public void setLocations(List<LocationDTO> locations) {
 		this.locations = locations;
 	}
+
 	public List<PhaseDTO> getPhases() {
 		return phases;
 	}
+
 	public void setPhases(List<PhaseDTO> phases) {
 		this.phases = phases;
 	}
@@ -68,7 +72,5 @@ public class PatientDTO {
 	public void setSecondSurname(String secondSurname) {
 		this.secondSurname = secondSurname;
 	}
-	
-	
-	
+
 }
