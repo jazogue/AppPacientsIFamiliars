@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 @Service // same as @Component
 public class AppPacFamController {
 	private PatientDAO patientDAO;
@@ -97,11 +99,11 @@ public class AppPacFamController {
 	public List<StateDTO> getStates() {
 		return stateDAO.getStates();
 	}
-	
+
 	public List<StateDTO> getStatesByPatientId(String id) {
 		return stateDAO.getStatesByPatientId(id);
 	}
-	
+
 	public int getManyNewStatesByPatientId(String id) {
 		return stateDAO.getManyNewStatesByPatientId(id);
 	}
@@ -110,7 +112,23 @@ public class AppPacFamController {
 		return stateDAO.getNewStatesByPatientId(id);
 	}
 
+	public void setNewPatient(PatientDTO patient) {
+		patientDAO.setNewPatient(patient);
+
+	}
+
+	public void setNewPhase(@Valid PhaseDTO phase, String patientId) {
+		phaseDAO.setNewPhase(phase, patientId);
+	}
+
+	public void setNewLocation(@Valid LocationDTO location, String patientId) {
+		locationDAO.setNewLocation(location, patientId);
+	}
 	
+	public void setNewState(StateDTO state, String phaseId) {
+		stateDAO.setNewState(state, phaseId);
+	}
+
 	// ******************
 
 	private PatientDTO patientToPatientDTO(Patient patient) {
@@ -206,7 +224,6 @@ public class AppPacFamController {
 		return phases;
 	}
 
-	
 	
 
 }

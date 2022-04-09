@@ -2,6 +2,8 @@ package cat.tecnocampus.AppPacFam.application;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import cat.tecnocampus.AppPacFam.application.dto.PatientDTO;
 
 public interface PatientDAO {
@@ -13,5 +15,7 @@ public interface PatientDAO {
 	List<PatientDTO> getNewPatients();
 
 	List<PatientDTO> getPatients();
+
+	void setNewPatient(PatientDTO patient);
 
 }

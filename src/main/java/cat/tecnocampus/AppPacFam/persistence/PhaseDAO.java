@@ -2,6 +2,8 @@ package cat.tecnocampus.AppPacFam.persistence;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.simpleflatmapper.jdbc.spring.JdbcTemplateMapperFactory;
 import org.simpleflatmapper.jdbc.spring.ResultSetExtractorImpl;
 import org.simpleflatmapper.jdbc.spring.RowMapperImpl;
@@ -31,6 +33,7 @@ public class PhaseDAO implements cat.tecnocampus.AppPacFam.application.PhaseDAO 
 		phase.setPhaseName(resultSet.getString("phaseName"));
 		phase.setStartTime(resultSet.getDate("startTime"));
 		phase.setFinishedTime(resultSet.getDate("finishedTime"));
+		phase.setHospitalCareType(resultSet.getInt("hospitalCareType"));
 
 		return phase;
 	};
@@ -43,7 +46,7 @@ public class PhaseDAO implements cat.tecnocampus.AppPacFam.application.PhaseDAO 
 
 	@Override
 	public List<PhaseDTO> getPhases() {
-		final var query = "select phaseId, phaseName, startTime, finishedTime from op_phase";
+		final var query = "select phaseId, phaseName, startTime, finishedTime, hospitalCareType from op_phase";
 
 		var result = jdbcTemplate.query(query, phasesRowMapper);
 		return result;
@@ -77,6 +80,12 @@ public class PhaseDAO implements cat.tecnocampus.AppPacFam.application.PhaseDAO 
 		final var query = "SELECT COUNT(checked) FROM op_phase WHERE (checked = FALSE AND patientId = ?);";
 
 		return jdbcTemplate.queryForObject(query, Integer.class, id);
+	}
+
+	@Override
+	public void setNewPhase(@Valid PhaseDTO phase,  String patientId) {
+		final var query = "INSERT INTO op_phase (phaseId, phaseName, startTime, finishedTime, hospitalCareType, patientId) VALUES (?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(query, phase.getPhaseId(), phase.getPhaseName(), phase.getStartTime(), phase.getFinishedTime(), phase.getHospitalCareType(), patientId);
 	}
 
 }

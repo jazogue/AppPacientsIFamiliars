@@ -2,6 +2,8 @@ package cat.tecnocampus.AppPacFam.application;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import cat.tecnocampus.AppPacFam.application.dto.LocationDTO;
 import cat.tecnocampus.AppPacFam.application.dto.PatientDTO;
 import cat.tecnocampus.AppPacFam.application.dto.PhaseDTO;
@@ -16,5 +18,7 @@ public interface LocationDAO {
 	int getManyNewLocationsByPatientId(String id);
 
 	List<LocationDTO> getLocations();
+
+	void setNewLocation(@Valid LocationDTO location, String patientId);
 
 }

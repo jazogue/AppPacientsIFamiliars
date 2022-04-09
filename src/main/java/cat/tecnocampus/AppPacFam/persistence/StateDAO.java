@@ -48,7 +48,7 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 	}
 
 	public List<StateDTO> getStatesByPatientId(String id) {
-		final var query = "select stateId, stateName, startTime from state inner join op_phase on "
+		final var query = "select state.stateId, state.stateName, state.startTime from state inner join op_phase on "
 				+ "state.phaseId = op_phase.phaseId inner join patient on op_phase.patientId = patient.patientId where patient.patientId = ?";
 
 		var result = jdbcTemplate.query(query, statesRowMapper, id);
@@ -65,7 +65,7 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 
 	@Override
 	public List<StateDTO> getNewStatesByPatientId(String id) {
-		final var query = "SELECT stateId, stateName, startTime from state right outer join op_phase on "
+		final var query = "SELECT state.stateId, state.stateName, state.startTime from state right outer join op_phase on "
 				+ "state.phaseId = op_phase.phaseId right outer join patient on op_phase.patientId = patient.patientId WHERE (state.checked = FALSE AND patient.patientId = ?);";
 
 		var result = jdbcTemplate.query(query, statesRowMapper, id);
@@ -74,6 +74,12 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 		jdbcTemplate.update(queryUpdate);
 
 		return result;
+	}
+
+	@Override
+	public void setNewState(StateDTO state, String phaseId) {
+		final var query = "INSERT INTO state (stateId, stateName, startTime, phaseId) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(query, state.getStateId(), state.getStateName(), state.getStartTime(), phaseId);
 	}
 
 }

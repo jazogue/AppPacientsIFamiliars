@@ -1,7 +1,8 @@
 package cat.tecnocampus.AppPacFam.persistence;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.simpleflatmapper.jdbc.spring.JdbcTemplateMapperFactory;
 import org.simpleflatmapper.jdbc.spring.ResultSetExtractorImpl;
@@ -12,7 +13,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import cat.tecnocampus.AppPacFam.application.dto.LocationDTO;
-import cat.tecnocampus.AppPacFam.application.dto.PatientDTO;
 import cat.tecnocampus.AppPacFam.application.exception.PatientNotFoundException;
 
 @Repository // @Component
@@ -78,6 +78,12 @@ public class LocationDAO implements cat.tecnocampus.AppPacFam.application.Locati
 		jdbcTemplate.update(queryUpdate, id);
 
 		return locations;
+	}
+
+	@Override
+	public void setNewLocation(@Valid LocationDTO location, String patientId) {
+		final var query = "INSERT INTO location (locationId, locationName, entryTime, departureTime, patientId) VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(query, location.getLocationId(), location.getLocationName(), location.getEntryTime(), location.getDepartureTime(), patientId);
 	}
 
 }

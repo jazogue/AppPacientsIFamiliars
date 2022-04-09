@@ -1,6 +1,5 @@
 package cat.tecnocampus.AppPacFam.api;
 
-
 import org.springframework.web.bind.annotation.*;
 
 import cat.tecnocampus.AppPacFam.application.AppPacFamController;
@@ -10,6 +9,8 @@ import cat.tecnocampus.AppPacFam.application.dto.PhaseDTO;
 import cat.tecnocampus.AppPacFam.application.dto.StateDTO;
 
 import java.util.List;
+
+import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -25,7 +26,7 @@ public class PatientRestController {
 	public List<PatientDTO> getPatients() {
 		return appPacFamController.getPatients();
 	}
-	
+
 	@GetMapping("/patient/{id}")
 	public PatientDTO getPatientById(@PathVariable String id) {
 		return appPacFamController.getPatientById(id);
@@ -40,7 +41,7 @@ public class PatientRestController {
 	public List<PatientDTO> getNewPatients() {
 		return appPacFamController.getNewPatients();
 	}
-	
+
 	@GetMapping("/locations")
 	public List<LocationDTO> getLocations() {
 		return appPacFamController.getLocations();
@@ -65,7 +66,7 @@ public class PatientRestController {
 	public List<PhaseDTO> getPhases() {
 		return appPacFamController.getPhases();
 	}
-	
+
 	@GetMapping("/phases/patient/{id}")
 	public List<PhaseDTO> getPhasesByPatientId(@PathVariable String id) {
 		return appPacFamController.getPhasesByPatientId(id);
@@ -85,17 +86,17 @@ public class PatientRestController {
 	public List<StateDTO> getStates() {
 		return appPacFamController.getStates();
 	}
-	
+
 	@GetMapping("/states/phase/{id}")
 	public List<StateDTO> getStatesByPhaseId(@PathVariable String id) {
 		return appPacFamController.getStatesByPhaseId(id);
 	}
-	
+
 	@GetMapping("/states/patient/{id}")
 	public List<StateDTO> getStatesByPatientId(@PathVariable String id) {
 		return appPacFamController.getStatesByPatientId(id);
 	}
-	
+
 	@GetMapping("/states/patient/{id}/new/int")
 	public int getManyNewStatesByPatientId(@PathVariable String id) {
 		return appPacFamController.getManyNewStatesByPatientId(id);
@@ -110,5 +111,25 @@ public class PatientRestController {
 	public PatientDTO getPatientSummaryById(@PathVariable String id) {
 		return appPacFamController.getPatientSummaryById(id);
 	}
+
+	@PostMapping("/patient")
+	public void postStudent(@RequestBody @Valid PatientDTO patient) {
+		appPacFamController.setNewPatient(patient);
+	}
 	
+	@PostMapping("/phase/patient/{patientId}")
+    public void postPhase(@RequestBody @Valid PhaseDTO phase, @PathVariable String patientId) {
+	 appPacFamController.setNewPhase(phase, patientId);
+    }
+	
+	@PostMapping("/location/patient/{patientId}")
+    public void postLocation(@RequestBody @Valid LocationDTO location, @PathVariable String patientId) {
+	 appPacFamController.setNewLocation(location, patientId);
+    }
+	
+	@PostMapping("/state/phase/{phaseId}")
+    public void postState(@RequestBody @Valid StateDTO state, @PathVariable String phaseId) {
+	 appPacFamController.setNewState(state, phaseId);
+    }
+
 }

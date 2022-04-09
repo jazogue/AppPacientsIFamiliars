@@ -2,6 +2,8 @@ package cat.tecnocampus.AppPacFam.application;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import cat.tecnocampus.AppPacFam.application.dto.PhaseDTO;
 import cat.tecnocampus.AppPacFam.application.dto.StateDTO;
 
@@ -16,5 +18,7 @@ public interface StateDAO {
 	int getManyNewStatesByPatientId(String id);
 
 	List<StateDTO> getNewStatesByPatientId(String id);
+
+	void setNewState(StateDTO state, String phaseId);
 
 }

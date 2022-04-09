@@ -77,4 +77,10 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 		return patients;
 	}
 
+	@Override
+	public void setNewPatient(PatientDTO patient) {
+		final var query = "INSERT INTO patient (patientId, patientName, firstSurname, secondSurname) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(query, patient.getPatientId(), patient.getPatientName(), patient.getFirstSurname(), patient.getSecondSurname());
+	}
+
 }
