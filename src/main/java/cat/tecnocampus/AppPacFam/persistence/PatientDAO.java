@@ -62,7 +62,6 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 	@Override
 	public int getManyNewPatients() {
 		final var query = "SELECT COUNT(checked) FROM patient WHERE checked = FALSE;";
-
 		return jdbcTemplate.queryForObject(query, Integer.class);
 	}
 
@@ -82,7 +81,8 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 	@Override
 	public void setNewPatient(PatientDTO patient) {
 		final var query = "INSERT INTO patient (patientId, patientName, firstSurname, secondSurname, hospitalCareType) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(query, patient.getPatientId(), patient.getPatientName(), patient.getFirstSurname(), patient.getSecondSurname(), patient.getHospitalCareType().toString());
+		jdbcTemplate.update(query, patient.getPatientId(), patient.getPatientName(), patient.getFirstSurname(),
+				patient.getSecondSurname(), patient.getHospitalCareType().toString());
 	}
 
 }

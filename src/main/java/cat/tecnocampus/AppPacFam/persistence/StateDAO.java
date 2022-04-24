@@ -29,16 +29,6 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 	RowMapperImpl<StateDTO> stateRowMapper = JdbcTemplateMapperFactory.newInstance().addKeys("stateId")
 			.newRowMapper(StateDTO.class);
 
-	@Override
-	public List<StateDTO> getStatesByPhaseId(String id) {
-		final var query = "select stateId, stateName, startTime from state where phaseId = ?";
-		try {
-			var result = jdbcTemplate.query(query, statesRowMapper, id);
-			return result;
-		} catch (EmptyResultDataAccessException e) {
-			throw new PatientNotFoundException(id);
-		}
-	}
 
 	@Override
 	public List<StateDTO> getStates() {
@@ -46,6 +36,7 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 				"state.stateId = treatment_event.stateId";
 
 		var result = jdbcTemplate.query(query, statesRowMapper);
+		result.sort((o1,o2) -> o1.getStartTime().compareTo(o2.getStartTime()));
 		return result;
 	}
 
@@ -54,6 +45,7 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 				+ "state.stateId = treatment_event.stateId inner join patient on treatment_event.patientId = patient.patientId where patient.patientId = ?";
 
 		var result = jdbcTemplate.query(query, statesRowMapper, id);
+		result.sort((o1,o2) -> o1.getStartTime().compareTo(o2.getStartTime()));
 		return result;
 	}
 
