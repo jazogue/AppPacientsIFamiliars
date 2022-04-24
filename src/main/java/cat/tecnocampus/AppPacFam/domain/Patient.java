@@ -2,6 +2,7 @@ package cat.tecnocampus.AppPacFam.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Patient {
 	private String patientId;
@@ -12,7 +13,7 @@ public class Patient {
 	private List<Phase> phases = new ArrayList<>();
 
 	public Patient() {
-
+		this.patientId = UUID.randomUUID().toString();
 	}
 
 	public String getPatientId() {

@@ -2,6 +2,7 @@ package cat.tecnocampus.AppPacFam.application.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -17,12 +18,14 @@ public class PatientDTO {
 	@NotNull(message = "First surname cannot be null")
 	@NotBlank(message = "First surname cannot be blank")
 	private String firstSurname;
+	@NotNull(message = "Second surname cannot be null")
+	@NotBlank(message = "Second surname cannot be blank")
 	private String secondSurname;
 	private List<LocationDTO> locations = new ArrayList<>();
 	private List<PhaseDTO> phases = new ArrayList<>();
 
 	public PatientDTO() {
-
+		this.patientId = UUID.randomUUID().toString();
 	}
 
 	public String getPatientId() {

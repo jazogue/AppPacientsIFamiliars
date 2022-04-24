@@ -2,6 +2,7 @@ package cat.tecnocampus.AppPacFam.application.dto;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -10,11 +11,14 @@ public class StateDTO {
 	@NotNull(message = "Id cannot be null")
 	@NotBlank(message = "Id cannot be blank")
 	private String stateId;
+	@NotNull(message = "Id cannot be null")
+	@NotBlank(message = "Id cannot be blank")
 	private String stateName;
+	@NotNull(message = "Start time cannot be null")
 	private Date startTime;
 
 	public StateDTO() {
-
+		this.stateId = UUID.randomUUID().toString();
 	}
 
 	public String getStateId() {

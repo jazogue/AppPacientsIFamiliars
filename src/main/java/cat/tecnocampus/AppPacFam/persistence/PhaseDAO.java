@@ -12,10 +12,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import cat.tecnocampus.AppPacFam.application.dto.LocationDTO;
-import cat.tecnocampus.AppPacFam.application.dto.PatientDTO;
 import cat.tecnocampus.AppPacFam.application.dto.PhaseDTO;
 import cat.tecnocampus.AppPacFam.application.exception.PatientNotFoundException;
+import cat.tecnocampus.AppPacFam.domain.Phase;
 
 @Repository // @Component
 public class PhaseDAO implements cat.tecnocampus.AppPacFam.application.PhaseDAO {
@@ -33,7 +32,7 @@ public class PhaseDAO implements cat.tecnocampus.AppPacFam.application.PhaseDAO 
 		phase.setPhaseName(resultSet.getString("phaseName"));
 		phase.setStartTime(resultSet.getDate("startTime"));
 		phase.setFinishedTime(resultSet.getDate("finishedTime"));
-		phase.setHospitalCareType(resultSet.getInt("hospitalCareType"));
+		phase.setHospitalCareType(Phase.HospitalCareType.valueOf(resultSet.getString("hospitalCareType")));
 
 		return phase;
 	};
@@ -85,7 +84,7 @@ public class PhaseDAO implements cat.tecnocampus.AppPacFam.application.PhaseDAO 
 	@Override
 	public void setNewPhase(@Valid PhaseDTO phase,  String patientId) {
 		final var query = "INSERT INTO op_phase (phaseId, phaseName, startTime, finishedTime, hospitalCareType, patientId) VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(query, phase.getPhaseId(), phase.getPhaseName(), phase.getStartTime(), phase.getFinishedTime(), phase.getHospitalCareType(), patientId);
+        jdbcTemplate.update(query, phase.getPhaseId(), phase.getPhaseName(), phase.getStartTime(), phase.getFinishedTime(), phase.getHospitalCareType().toString(), patientId);
 	}
 
 }

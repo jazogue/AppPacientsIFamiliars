@@ -1,6 +1,7 @@
 package cat.tecnocampus.AppPacFam.domain;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class State {
 	private String stateId;
@@ -8,7 +9,7 @@ public class State {
 	private Date startTime;
 	
 	public State() {
-
+		this.stateId = UUID.randomUUID().toString();
 	}
 
 	public String getStateId() {

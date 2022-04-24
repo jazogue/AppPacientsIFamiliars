@@ -3,17 +3,21 @@ package cat.tecnocampus.AppPacFam.domain;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class Phase {
+	
+	public enum HospitalCareType {quirurgic, urgencies}
+	
 	private String idPhase;
 	private String phaseName;
 	private Date startTime;
 	private Date finishedTime;
-	private int hospitalCareType;
+	private HospitalCareType hospitalCareType;
 	private List<State> states = new ArrayList<>();
 
 	public Phase() {
-
+		this.idPhase = UUID.randomUUID().toString();
 	}
 
 	public String getIdPhase() {
@@ -56,11 +60,11 @@ public class Phase {
 		this.states = states;
 	}
 
-	public int getHospitalCareType() {
+	public HospitalCareType getHospitalCareType() {
 		return hospitalCareType;
 	}
 
-	public void setHospitalCareType(int hospitalCareType) {
+	public void setHospitalCareType(HospitalCareType hospitalCareType) {
 		this.hospitalCareType = hospitalCareType;
 	}
 

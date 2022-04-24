@@ -2,6 +2,7 @@ package cat.tecnocampus.AppPacFam.domain;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 public class Location {
 	private String locationId;
@@ -10,7 +11,7 @@ public class Location {
 	private Date departureTime;
 
 	public Location() {
-
+		this.locationId = UUID.randomUUID().toString();
 	}
 
 	public String getLocationId() {

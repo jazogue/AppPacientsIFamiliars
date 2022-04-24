@@ -4,22 +4,29 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import cat.tecnocampus.AppPacFam.domain.Phase.HospitalCareType;
 
 public class PhaseDTO {
 	@NotNull(message = "Id cannot be null")
 	@NotBlank(message = "Id cannot be blank")
 	private String phaseId;
+	@NotNull(message = "Phase name cannot be null")
+	@NotBlank(message = "Phase name cannot be blank")
 	private String phaseName;
+	@NotNull(message = "Start time cannot be null")
 	private Date startTime;
 	private Date finishedTime;
-	private int hospitalCareType;
+	@NotNull(message = "Hospital care type cannot be null")
+	private HospitalCareType hospitalCareType;
 	private List<StateDTO> states = new ArrayList<>();
 
 	public PhaseDTO() {
-
+		this.phaseId = UUID.randomUUID().toString();
 	}
 
 	public String getPhaseId() {
@@ -62,11 +69,11 @@ public class PhaseDTO {
 		this.states = states;
 	}
 
-	public int getHospitalCareType() {
+	public HospitalCareType getHospitalCareType() {
 		return hospitalCareType;
 	}
 
-	public void setHospitalCareType(int hospitalCareType) {
+	public void setHospitalCareType(HospitalCareType hospitalCareType) {
 		this.hospitalCareType = hospitalCareType;
 	}
 
