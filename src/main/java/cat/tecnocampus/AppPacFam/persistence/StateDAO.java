@@ -1,6 +1,7 @@
 package cat.tecnocampus.AppPacFam.persistence;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.simpleflatmapper.jdbc.spring.JdbcTemplateMapperFactory;
 import org.simpleflatmapper.jdbc.spring.ResultSetExtractorImpl;
@@ -41,15 +42,16 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 
 	@Override
 	public List<StateDTO> getStates() {
-		final var query = "select stateId, stateName, startTime from state";
+		final var query = "select state.stateId, state.stateName, treatment_event.startTime from state inner join treatment_event on "+ 
+				"state.stateId = treatment_event.stateId";
 
 		var result = jdbcTemplate.query(query, statesRowMapper);
 		return result;
 	}
 
 	public List<StateDTO> getStatesByPatientId(String id) {
-		final var query = "select state.stateId, state.stateName, state.startTime from state inner join op_phase on "
-				+ "state.phaseId = op_phase.phaseId inner join patient on op_phase.patientId = patient.patientId where patient.patientId = ?";
+		final var query = "select state.stateId, state.stateName, treatment_event.startTime from state inner join treatment_event on "
+				+ "state.stateId = treatment_event.stateId inner join patient on treatment_event.patientId = patient.patientId where patient.patientId = ?";
 
 		var result = jdbcTemplate.query(query, statesRowMapper, id);
 		return result;
@@ -57,16 +59,16 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 
 	@Override
 	public int getManyNewStatesByPatientId(String id) {
-		final var query = "SELECT COUNT(state.checked) from state right outer join op_phase on "
-				+ "state.phaseId = op_phase.phaseId right outer join patient on op_phase.patientId = patient.patientId WHERE (state.checked = FALSE AND patient.patientId = ?);";
+		final var query = "SELECT COUNT(state.checked) from state right outer join treatment_event on "
+				+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.checked = FALSE AND patient.patientId = ?);";
 
 		return jdbcTemplate.queryForObject(query, Integer.class, id);
 	}
 
 	@Override
 	public List<StateDTO> getNewStatesByPatientId(String id) {
-		final var query = "SELECT state.stateId, state.stateName, state.startTime from state right outer join op_phase on "
-				+ "state.phaseId = op_phase.phaseId right outer join patient on op_phase.patientId = patient.patientId WHERE (state.checked = FALSE AND patient.patientId = ?);";
+		final var query = "SELECT state.stateId, state.stateName, treatment_event.startTime from state right outer join treatment_event on "
+				+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.checked = FALSE AND patient.patientId = ?);";
 
 		var result = jdbcTemplate.query(query, statesRowMapper, id);
 
@@ -77,9 +79,12 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 	}
 
 	@Override
-	public void setNewState(StateDTO state, String phaseId) {
-		final var query = "INSERT INTO state (stateId, stateName, startTime, phaseId) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(query, state.getStateId(), state.getStateName(), state.getStartTime(), phaseId);
+	public void setNewState(StateDTO state, String patientId) {
+		final var query1 = "INSERT INTO state (stateId, stateName) VALUES (?, ?)";
+		final var query2 = "INSERT INTO treatment_event (eventId, startTime, stateId, patientId) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(query1, state.getStateId(), state.getStateName());
+        jdbcTemplate.update(query2, UUID.randomUUID().toString(), state.getStartTime(), state.getStateId(), patientId);
+        
 	}
 
 }

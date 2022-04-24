@@ -7,8 +7,10 @@ import java.util.UUID;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class PatientDTO {
+import cat.tecnocampus.AppPacFam.domain.Patient.HospitalCareType;
 
+public class PatientDTO {
+	
 	@NotNull(message = "Id cannot be null")
 	@NotBlank(message = "Id cannot be blank")
 	private String patientId;
@@ -21,8 +23,9 @@ public class PatientDTO {
 	@NotNull(message = "Second surname cannot be null")
 	@NotBlank(message = "Second surname cannot be blank")
 	private String secondSurname;
-	private List<LocationDTO> locations = new ArrayList<>();
-	private List<PhaseDTO> phases = new ArrayList<>();
+	private HospitalCareType hospitalCareType;
+	private List<StateDTO> states = new ArrayList<>();
+
 
 	public PatientDTO() {
 		this.patientId = UUID.randomUUID().toString();
@@ -34,22 +37,6 @@ public class PatientDTO {
 
 	public void setPatientId(String patientId) {
 		this.patientId = patientId;
-	}
-
-	public List<LocationDTO> getLocations() {
-		return locations;
-	}
-
-	public void setLocations(List<LocationDTO> locations) {
-		this.locations = locations;
-	}
-
-	public List<PhaseDTO> getPhases() {
-		return phases;
-	}
-
-	public void setPhases(List<PhaseDTO> phases) {
-		this.phases = phases;
 	}
 
 	public String getPatientName() {
@@ -74,6 +61,22 @@ public class PatientDTO {
 
 	public void setSecondSurname(String secondSurname) {
 		this.secondSurname = secondSurname;
+	}
+
+	public List<StateDTO> getStates() {
+		return states;
+	}
+
+	public void setStates(List<StateDTO> states) {
+		this.states = states;
+	}
+
+	public HospitalCareType getHospitalCareType() {
+		return hospitalCareType;
+	}
+
+	public void setHospitalCareType(HospitalCareType hospitalCareType) {
+		this.hospitalCareType = hospitalCareType;
 	}
 
 }

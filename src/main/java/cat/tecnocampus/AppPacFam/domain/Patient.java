@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
 public class Patient {
+	public enum HospitalCareType {quirurgic, urgencies}
+	
 	private String patientId;
 	private String patientName;
 	private String firstSurname;
 	private String secondSurname;
-	private List<Location> locations = new ArrayList<>();
-	private List<Phase> phases = new ArrayList<>();
+	private HospitalCareType hospitalCareType;
+	private List<State> states = new ArrayList<>();
 
 	public Patient() {
 		this.patientId = UUID.randomUUID().toString();
@@ -24,21 +27,6 @@ public class Patient {
 		this.patientId = patientId;
 	}
 
-	public List<Location> getLocations() {
-		return locations;
-	}
-
-	public void setLocations(List<Location> locations) {
-		this.locations = locations;
-	}
-
-	public List<Phase> getPhases() {
-		return phases;
-	}
-
-	public void setPhases(List<Phase> phases) {
-		this.phases = phases;
-	}
 
 	public String getPatientName() {
 		return patientName;
@@ -68,6 +56,22 @@ public class Patient {
 	public String toString() {
 		return "Patient{" + "patientId='" + patientId + '\'' + ", patientName=" + patientName + ", firstSurname='"
 				+ firstSurname + '\'' + ", secondSurname=" + secondSurname + '}';
+	}
+
+	public List<State> getStates() {
+		return states;
+	}
+
+	public void setStates(List<State> list) {
+		this.states = list;
+	}
+
+	public HospitalCareType getHospitalCareType() {
+		return hospitalCareType;
+	}
+
+	public void setHospitalCareType(HospitalCareType hospitalCareType) {
+		this.hospitalCareType = hospitalCareType;
 	}
 
 }

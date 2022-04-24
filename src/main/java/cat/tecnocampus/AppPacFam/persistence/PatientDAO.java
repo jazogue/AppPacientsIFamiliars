@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import cat.tecnocampus.AppPacFam.application.dto.PatientDTO;
 import cat.tecnocampus.AppPacFam.application.exception.PatientNotFoundException;
+import cat.tecnocampus.AppPacFam.domain.Patient;
 
 @Repository // @Component
 public class PatientDAO implements cat.tecnocampus.AppPacFam.application.PatientDAO {
@@ -29,7 +30,8 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 		patient.setPatientName(resultSet.getString("patientName"));
 		patient.setFirstSurname(resultSet.getString("firstSurname"));
 		patient.setSecondSurname(resultSet.getString("secondSurname"));
-		patient.setPhases(null);
+		patient.setStates(null);
+		patient.setHospitalCareType(Patient.HospitalCareType.valueOf(resultSet.getString("hospitalCareType")));
 
 		return patient;
 	};
@@ -42,7 +44,7 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 
 	@Override
 	public List<PatientDTO> getPatients() {
-		final var query = "select patientId, patientName, firstSurname, secondSurname from patient";
+		final var query = "select patientId, patientName, firstSurname, secondSurname, hospitalCareType from patient";
 
 		return jdbcTemplate.query(query, patientsRowMapper);
 	}
@@ -66,7 +68,7 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 
 	@Override
 	public List<PatientDTO> getNewPatients() {
-		final var query = "SELECT patientId, patientName, firstSurname, secondSurname"
+		final var query = "SELECT patientId, patientName, firstSurname, secondSurname, hospitalCareType"
 				+ " FROM patient WHERE checked = FALSE FOR UPDATE;";
 
 		List<PatientDTO> patients = jdbcTemplate.query(query, patientsRowMapper);
@@ -79,8 +81,8 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 
 	@Override
 	public void setNewPatient(PatientDTO patient) {
-		final var query = "INSERT INTO patient (patientId, patientName, firstSurname, secondSurname) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(query, patient.getPatientId(), patient.getPatientName(), patient.getFirstSurname(), patient.getSecondSurname());
+		final var query = "INSERT INTO patient (patientId, patientName, firstSurname, secondSurname, hospitalCareType) VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(query, patient.getPatientId(), patient.getPatientName(), patient.getFirstSurname(), patient.getSecondSurname(), patient.getHospitalCareType().toString());
 	}
 
 }
