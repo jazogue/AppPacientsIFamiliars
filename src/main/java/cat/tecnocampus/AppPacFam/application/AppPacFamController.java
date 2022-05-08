@@ -75,13 +75,22 @@ public class AppPacFamController {
 
 	}
 
-	public void setNewState(StateDTO state, String patientId) {
-		stateDAO.setNewState(state, patientId);
+	public void setNewGenericState(StateDTO state) {
+		stateDAO.setNewGenericState(state);
 	}
 	
 	public List<StateDTO>  getTypedStatesByPatientId(String id, boolean type) {
 		return stateDAO.getTypedStatesByPatientId(id, type);
 	}
+	
+	public void setNewGenericStateToPatient(String stateId, String patientId) {
+		 stateDAO.setNewGenericStateToPatient(stateId, patientId);
+	}
+	
+	public void setNewCustomStateToPatient(StateDTO state, String patientId) {
+		 stateDAO.setNewCustomStateToPatient(state, patientId);
+	}
+
 
 	// ******************
 
@@ -133,6 +142,9 @@ public class AppPacFamController {
 
 		return state;
 	}
+
+
+	
 
 
 	

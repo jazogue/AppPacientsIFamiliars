@@ -80,9 +80,24 @@ public class PatientRestController {
 		appPacFamController.setNewPatient(patient);
 	}
 	
-	@PostMapping("/state/patient/{patientId}")
-    public void postState(@RequestBody @Valid StateDTO state, @PathVariable String patientId) {
-	 appPacFamController.setNewState(state, patientId);
+	@PostMapping("/state/gen")
+    public void postGenericState(@RequestBody @Valid StateDTO state) {
+	 appPacFamController.setNewGenericState(state);
     }
+	
+
+	@PostMapping("/state/generic/{stateId}/patient/{patientId}")
+    public void setNewGenericStateToPatient(@PathVariable String stateId, @PathVariable String patientId) {
+	 appPacFamController.setNewGenericStateToPatient(stateId, patientId);
+    }
+	
+	@PostMapping("/state/custom/patient/{patientId}")
+    public void setNewCustomStateToPatient(@RequestBody @Valid StateDTO state, @PathVariable String patientId) {
+	 appPacFamController.setNewCustomStateToPatient(state, patientId);
+    }
+	
+	
+	
+	
 
 }

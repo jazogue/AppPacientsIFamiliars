@@ -1,5 +1,6 @@
 package cat.tecnocampus.AppPacFam.persistence;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -74,10 +75,10 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 		var query = "";
 		if(type)
 		 query = "SELECT state.stateId, state.stateName, state.stateType, treatment_event.startTime from state right outer join treatment_event on "
-				+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.checked = FALSE AND state.stateType = 'generic' AND patient.patientId = ?);";
+				+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.stateType = 'generic' AND patient.patientId = ?);";
 		else
 			query = "SELECT state.stateId, state.stateName, state.stateType, treatment_event.startTime from state right outer join treatment_event on "
-					+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.checked = FALSE AND state.stateType = 'personalitzat' AND patient.patientId = ?);";
+					+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.stateType = 'personalitzat' AND patient.patientId = ?);";
 		var result = jdbcTemplate.query(query, statesRowMapper, id);
 
 		final var queryUpdate = "UPDATE state SET checked = TRUE WHERE checked = FALSE;";
@@ -87,11 +88,25 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 	}
 
 	@Override
-	public void setNewState(StateDTO state, String patientId) {
+	public void setNewGenericState(StateDTO state) {
+		final var query1 = "INSERT INTO state (stateId, stateName, stateType) VALUES (?, ?, ?)";
+        jdbcTemplate.update(query1, state.getStateId(), state.getStateName(), state.getStateType().toString());
+	}
+	
+
+	@Override
+	public void setNewGenericStateToPatient(String stateId, String patientId) {
+		final var query = "INSERT INTO treatment_event (eventId, startTime, stateId, patientId) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(query, UUID.randomUUID().toString(), new Date(), stateId, patientId);
+        
+	}
+	
+	@Override
+	public void setNewCustomStateToPatient(StateDTO state, String patientId) {
 		final var query1 = "INSERT INTO state (stateId, stateName, stateType) VALUES (?, ?, ?)";
 		final var query2 = "INSERT INTO treatment_event (eventId, startTime, stateId, patientId) VALUES (?, ?, ?, ?)";
         jdbcTemplate.update(query1, state.getStateId(), state.getStateName(), state.getStateType().toString());
-        jdbcTemplate.update(query2, UUID.randomUUID().toString(), state.getStartTime(), state.getStateId(), patientId);
+        jdbcTemplate.update(query2, UUID.randomUUID().toString(), new Date(), state.getStateId(), patientId);
         
 	}
 
