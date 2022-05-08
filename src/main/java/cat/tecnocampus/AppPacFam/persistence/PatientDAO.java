@@ -1,5 +1,6 @@
 package cat.tecnocampus.AppPacFam.persistence;
 
+
 import java.util.List;
 
 import org.simpleflatmapper.jdbc.spring.JdbcTemplateMapperFactory;
@@ -24,8 +25,12 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 	}
 
 	private final RowMapper<PatientDTO> patientRowMapperLazy = (resultSet, i) -> {
-		PatientDTO patient = new PatientDTO();
 
+		PatientDTO patient = new PatientDTO();
+		
+		while(this.existPatientById(patient.getPatientId()))
+				patient = new PatientDTO();
+			
 		patient.setPatientId(resultSet.getString("patientId"));
 		patient.setPatientName(resultSet.getString("patientName"));
 		patient.setFirstSurname(resultSet.getString("firstSurname"));
@@ -59,6 +64,22 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 			throw new PatientNotFoundException(id);
 		}
 	}
+	
+	@Override
+	public PatientDTO getPatientByAnyCriteria(String value) {
+		 var query = "select * from patient where patientId = ?";
+		try {
+			return jdbcTemplate.queryForObject(query, patientRowMapperLazy, value);
+		} catch (EmptyResultDataAccessException e) {
+			query = "select * from patient where healthCardIdentifier = ?";
+			try {
+				return jdbcTemplate.queryForObject(query, patientRowMapperLazy, value);
+			} catch (EmptyResultDataAccessException e2) {
+				throw new PatientNotFoundException(value);
+			}
+		}
+		
+	}
 
 	@Override
 	public int getManyNewPatients() {
@@ -84,6 +105,16 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 		final var query = "INSERT INTO patient (patientId, patientName, firstSurname, secondSurname, hospitalCareType, healthCardIdentifier) VALUES (?, ?, ?, ?, ?, ?)";
 		jdbcTemplate.update(query, patient.getPatientId(), patient.getPatientName(), patient.getFirstSurname(),
 				patient.getSecondSurname(), patient.getHospitalCareType().toString(), patient.getHealthCardIdentifier());
+	}
+	
+	private boolean existPatientById(String patientId) {
+		final var query = "select * from patient where patientId = ?";
+		try {
+			jdbcTemplate.queryForObject(query, patientRowMapperLazy, patientId);
+		} catch (EmptyResultDataAccessException e) {
+			return false;
+		}
+		return true;
 	}
 
 }

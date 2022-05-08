@@ -30,6 +30,11 @@ public class PatientRestController {
 		return appPacFamController.getPatientById(id);
 	}
 
+	@GetMapping("/patient/any/{value}")
+	public PatientDTO getPatientByAnyCriteria(@PathVariable String value) {
+		return appPacFamController.getPatientByAnyCriteria(value);
+	}
+	
 	@GetMapping("/patients/new/int")
 	public int getManyNewPatients() {
 		return appPacFamController.getManyNewPatients();

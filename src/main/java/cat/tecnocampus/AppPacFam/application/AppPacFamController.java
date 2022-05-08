@@ -95,6 +95,10 @@ public class AppPacFamController {
 		return stateDAO.getTypedStates(type);
 	}
 
+	public PatientDTO getPatientByAnyCriteria(String value) {
+		return patientDAO.getPatientByAnyCriteria(value);
+	}
+
 
 
 	// ******************
@@ -148,6 +152,7 @@ public class AppPacFamController {
 		return state;
 	}
 
+	
 	
 
 	

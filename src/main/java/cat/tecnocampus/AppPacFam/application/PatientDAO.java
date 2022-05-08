@@ -10,6 +10,8 @@ public interface PatientDAO {
 
 	PatientDTO getPatientById(String id);
 
+	PatientDTO getPatientByAnyCriteria(String value);
+	
 	int getManyNewPatients();
 
 	List<PatientDTO> getNewPatients();

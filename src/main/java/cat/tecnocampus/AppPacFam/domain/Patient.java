@@ -17,7 +17,7 @@ public class Patient {
 	private List<State> states = new ArrayList<>();
 
 	public Patient() {
-		this.patientId = UUID.randomUUID().toString();
+		this.patientId = UUID.randomUUID().toString().substring(0,5);
 	}
 
 	public String getPatientId() {

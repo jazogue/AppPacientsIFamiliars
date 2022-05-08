@@ -24,14 +24,14 @@ public class PatientDTO {
 	@NotBlank(message = "Second surname cannot be blank")
 	private String secondSurname;
 	private HospitalCareType hospitalCareType;
-	@NotNull(message = "Second surname cannot be null")
-	@NotBlank(message = "Second surname cannot be blank")
+	@NotNull(message = "Health card identifier cannot be null")
+	@NotBlank(message = "Health card identifier cannot be blank")
 	private String healthCardIdentifier;
 	private List<StateDTO> states = new ArrayList<>();
 
 
 	public PatientDTO() {
-		this.patientId = UUID.randomUUID().toString();
+		this.patientId = UUID.randomUUID().toString().substring(0,5);
 	}
 
 	public String getPatientId() {
