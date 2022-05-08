@@ -30,6 +30,7 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 		patient.setPatientName(resultSet.getString("patientName"));
 		patient.setFirstSurname(resultSet.getString("firstSurname"));
 		patient.setSecondSurname(resultSet.getString("secondSurname"));
+		patient.setHealthCardIdentifier(resultSet.getString("healthCardIdentifier"));
 		patient.setStates(null);
 		patient.setHospitalCareType(Patient.HospitalCareType.valueOf(resultSet.getString("hospitalCareType")));
 
@@ -44,7 +45,7 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 
 	@Override
 	public List<PatientDTO> getPatients() {
-		final var query = "select patientId, patientName, firstSurname, secondSurname, hospitalCareType from patient";
+		final var query = "select patientId, patientName, firstSurname, secondSurname, hospitalCareType, healthCardIdentifier from patient";
 
 		return jdbcTemplate.query(query, patientsRowMapper);
 	}
@@ -67,7 +68,7 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 
 	@Override
 	public List<PatientDTO> getNewPatients() {
-		final var query = "SELECT patientId, patientName, firstSurname, secondSurname, hospitalCareType"
+		final var query = "SELECT patientId, patientName, firstSurname, secondSurname, hospitalCareType, healthCardIdentifier"
 				+ " FROM patient WHERE checked = FALSE FOR UPDATE;";
 
 		List<PatientDTO> patients = jdbcTemplate.query(query, patientsRowMapper);
@@ -80,9 +81,9 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 
 	@Override
 	public void setNewPatient(PatientDTO patient) {
-		final var query = "INSERT INTO patient (patientId, patientName, firstSurname, secondSurname, hospitalCareType) VALUES (?, ?, ?, ?, ?)";
+		final var query = "INSERT INTO patient (patientId, patientName, firstSurname, secondSurname, hospitalCareType, healthCardIdentifier) VALUES (?, ?, ?, ?, ?, ?)";
 		jdbcTemplate.update(query, patient.getPatientId(), patient.getPatientName(), patient.getFirstSurname(),
-				patient.getSecondSurname(), patient.getHospitalCareType().toString());
+				patient.getSecondSurname(), patient.getHospitalCareType().toString(), patient.getHealthCardIdentifier());
 	}
 
 }

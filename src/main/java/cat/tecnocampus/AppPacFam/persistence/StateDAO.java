@@ -32,7 +32,7 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 
 	@Override
 	public List<StateDTO> getStates() {
-		final var query = "select state.stateId, state.stateName, treatment_event.startTime from state inner join treatment_event on "+ 
+		final var query = "select state.stateId, state.stateName, state.stateType, treatment_event.startTime from state inner join treatment_event on "+ 
 				"state.stateId = treatment_event.stateId";
 
 		var result = jdbcTemplate.query(query, statesRowMapper);
@@ -41,7 +41,7 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 	}
 
 	public List<StateDTO> getStatesByPatientId(String id) {
-		final var query = "select state.stateId, state.stateName, treatment_event.startTime from state inner join treatment_event on "
+		final var query = "select state.stateId, state.stateName, state.stateType, treatment_event.startTime from state inner join treatment_event on "
 				+ "state.stateId = treatment_event.stateId inner join patient on treatment_event.patientId = patient.patientId where patient.patientId = ?";
 
 		var result = jdbcTemplate.query(query, statesRowMapper, id);
@@ -59,7 +59,7 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 
 	@Override
 	public List<StateDTO> getNewStatesByPatientId(String id) {
-		final var query = "SELECT state.stateId, state.stateName, treatment_event.startTime from state right outer join treatment_event on "
+		final var query = "SELECT state.stateId, state.stateName, state.stateType, treatment_event.startTime from state right outer join treatment_event on "
 				+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.checked = FALSE AND patient.patientId = ?);";
 
 		var result = jdbcTemplate.query(query, statesRowMapper, id);
@@ -72,9 +72,9 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 
 	@Override
 	public void setNewState(StateDTO state, String patientId) {
-		final var query1 = "INSERT INTO state (stateId, stateName) VALUES (?, ?)";
+		final var query1 = "INSERT INTO state (stateId, stateName, stateType) VALUES (?, ?, ?)";
 		final var query2 = "INSERT INTO treatment_event (eventId, startTime, stateId, patientId) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(query1, state.getStateId(), state.getStateName());
+        jdbcTemplate.update(query1, state.getStateId(), state.getStateName(), state.getStateType().toString());
         jdbcTemplate.update(query2, UUID.randomUUID().toString(), state.getStartTime(), state.getStateId(), patientId);
         
 	}

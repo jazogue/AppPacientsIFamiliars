@@ -24,6 +24,9 @@ public class PatientDTO {
 	@NotBlank(message = "Second surname cannot be blank")
 	private String secondSurname;
 	private HospitalCareType hospitalCareType;
+	@NotNull(message = "Second surname cannot be null")
+	@NotBlank(message = "Second surname cannot be blank")
+	private String healthCardIdentifier;
 	private List<StateDTO> states = new ArrayList<>();
 
 
@@ -55,6 +58,14 @@ public class PatientDTO {
 		this.firstSurname = firstSurname;
 	}
 
+	public String getHealthCardIdentifier() {
+		return healthCardIdentifier;
+	}
+
+	public void setHealthCardIdentifier(String healthCardIdentifier) {
+		this.healthCardIdentifier = healthCardIdentifier;
+	}
+	
 	public String getSecondSurname() {
 		return secondSurname;
 	}

@@ -100,6 +100,7 @@ public class AppPacFamController {
 		stateDTO.setStateId(state.getStateId());
 		stateDTO.setStateName(state.getStateName());
 		stateDTO.setStartTime(state.getStartTime());
+		stateDTO.setStateType(state.getStateType());
 
 		return stateDTO;
 	}
@@ -124,6 +125,7 @@ public class AppPacFamController {
 		state.setStateId(stateDTO.getStateId());
 		state.setStateName(stateDTO.getStateName());
 		state.setStartTime(stateDTO.getStartTime());
+		state.setStateType(stateDTO.getStateType());
 
 		return state;
 	}

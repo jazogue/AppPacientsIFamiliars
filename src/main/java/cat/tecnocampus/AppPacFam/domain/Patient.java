@@ -12,6 +12,7 @@ public class Patient {
 	private String patientName;
 	private String firstSurname;
 	private String secondSurname;
+	private String healthCardIdentifier;
 	private HospitalCareType hospitalCareType;
 	private List<State> states = new ArrayList<>();
 
@@ -52,12 +53,6 @@ public class Patient {
 		this.secondSurname = secondSurname;
 	}
 
-	@Override
-	public String toString() {
-		return "Patient{" + "patientId='" + patientId + '\'' + ", patientName=" + patientName + ", firstSurname='"
-				+ firstSurname + '\'' + ", secondSurname=" + secondSurname + '}';
-	}
-
 	public List<State> getStates() {
 		return states;
 	}
@@ -72,6 +67,14 @@ public class Patient {
 
 	public void setHospitalCareType(HospitalCareType hospitalCareType) {
 		this.hospitalCareType = hospitalCareType;
+	}
+
+	public String getHealthCardIdentifier() {
+		return healthCardIdentifier;
+	}
+
+	public void setHealthCardIdentifier(String healthCardIdentifier) {
+		this.healthCardIdentifier = healthCardIdentifier;
 	}
 
 }
