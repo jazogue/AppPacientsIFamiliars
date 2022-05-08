@@ -16,4 +16,6 @@ public interface StateDAO {
 
 	void setNewState(StateDTO state, String patientId);
 
+	List<StateDTO> getTypedStatesByPatientId(String id, boolean type);
+
 }

@@ -69,6 +69,22 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 
 		return result;
 	}
+	
+	public List<StateDTO> getTypedStatesByPatientId(String id, boolean type){
+		var query = "";
+		if(type)
+		 query = "SELECT state.stateId, state.stateName, state.stateType, treatment_event.startTime from state right outer join treatment_event on "
+				+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.checked = FALSE AND state.stateType = 'generic' AND patient.patientId = ?);";
+		else
+			query = "SELECT state.stateId, state.stateName, state.stateType, treatment_event.startTime from state right outer join treatment_event on "
+					+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.checked = FALSE AND state.stateType = 'personalitzat' AND patient.patientId = ?);";
+		var result = jdbcTemplate.query(query, statesRowMapper, id);
+
+		final var queryUpdate = "UPDATE state SET checked = TRUE WHERE checked = FALSE;";
+		jdbcTemplate.update(queryUpdate);
+
+		return result;
+	}
 
 	@Override
 	public void setNewState(StateDTO state, String patientId) {

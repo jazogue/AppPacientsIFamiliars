@@ -78,6 +78,10 @@ public class AppPacFamController {
 	public void setNewState(StateDTO state, String patientId) {
 		stateDAO.setNewState(state, patientId);
 	}
+	
+	public List<StateDTO>  getTypedStatesByPatientId(String id, boolean type) {
+		return stateDAO.getTypedStatesByPatientId(id, type);
+	}
 
 	// ******************
 
