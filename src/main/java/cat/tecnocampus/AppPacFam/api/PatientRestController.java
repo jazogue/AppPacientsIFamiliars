@@ -44,6 +44,16 @@ public class PatientRestController {
 	public List<StateDTO> getStates() {
 		return appPacFamController.getStates();
 	}
+	
+	@GetMapping("/states/generic")
+	public List<StateDTO> getGenericStates() {
+		return appPacFamController.getTypedStates(true);
+	}
+	
+	@GetMapping("/states/custom")
+	public List<StateDTO> getCustomStates() {
+		return appPacFamController.getTypedStates(false);
+	}
 
 	@GetMapping("/states/patient/{id}")
 	public List<StateDTO> getStatesByPatientId(@PathVariable String id) {
@@ -84,7 +94,6 @@ public class PatientRestController {
     public void postGenericState(@RequestBody @Valid StateDTO state) {
 	 appPacFamController.setNewGenericState(state);
     }
-	
 
 	@PostMapping("/state/generic/{stateId}/patient/{patientId}")
     public void setNewGenericStateToPatient(@PathVariable String stateId, @PathVariable String patientId) {
@@ -96,8 +105,4 @@ public class PatientRestController {
 	 appPacFamController.setNewCustomStateToPatient(state, patientId);
     }
 	
-	
-	
-	
-
 }

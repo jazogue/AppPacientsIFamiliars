@@ -90,6 +90,11 @@ public class AppPacFamController {
 	public void setNewCustomStateToPatient(StateDTO state, String patientId) {
 		 stateDAO.setNewCustomStateToPatient(state, patientId);
 	}
+	
+	public List<StateDTO> getTypedStates(boolean type) {
+		return stateDAO.getTypedStates(type);
+	}
+
 
 
 	// ******************
@@ -143,6 +148,7 @@ public class AppPacFamController {
 		return state;
 	}
 
+	
 
 	
 

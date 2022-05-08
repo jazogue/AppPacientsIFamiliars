@@ -110,4 +110,17 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
         
 	}
 
+	@Override
+	public List<StateDTO> getTypedStates(boolean type) {
+		var query = "";
+		 if(type)
+			 query = "SELECT stateId, stateName, stateType from state WHERE (state.stateType = 'generic');";
+		 else
+			 query = "SELECT stateId, stateName, stateType from state WHERE (state.stateType = 'personalitzat');";
+		 
+			var result = jdbcTemplate.query(query, statesRowMapper);
+
+			return result;
+	}
+
 }
