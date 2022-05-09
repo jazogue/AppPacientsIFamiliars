@@ -2,6 +2,8 @@ package cat.tecnocampus.AppPacFam.api;
 
 import org.springframework.web.bind.annotation.*;
 
+import com.google.gson.JsonObject;
+
 import cat.tecnocampus.AppPacFam.application.AppPacFamController;
 import cat.tecnocampus.AppPacFam.application.dto.PatientDTO;
 import cat.tecnocampus.AppPacFam.application.dto.StateDTO;
@@ -91,8 +93,8 @@ public class PatientRestController {
 	}
 
 	@PostMapping("/patient")
-	public void postStudent(@RequestBody @Valid PatientDTO patient) {
-		appPacFamController.setNewPatient(patient);
+	public JsonObject postStudent(@RequestBody @Valid PatientDTO patient) {
+		 return appPacFamController.setNewPatient(patient);
 	}
 	
 	@PostMapping("/state/gen")

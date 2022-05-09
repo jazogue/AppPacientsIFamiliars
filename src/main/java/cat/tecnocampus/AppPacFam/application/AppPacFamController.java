@@ -8,6 +8,8 @@ import cat.tecnocampus.AppPacFam.domain.State;
 
 import org.springframework.stereotype.Service;
 
+import com.google.gson.JsonObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,8 +72,8 @@ public class AppPacFamController {
 		return stateDAO.getNewStatesByPatientId(id);
 	}
 
-	public void setNewPatient(PatientDTO patient) {
-		patientDAO.setNewPatient(patient);
+	public JsonObject setNewPatient(PatientDTO patient) {
+		return patientDAO.setNewPatient(patient);
 
 	}
 

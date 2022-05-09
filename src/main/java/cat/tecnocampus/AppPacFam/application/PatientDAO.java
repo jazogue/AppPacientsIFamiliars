@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.google.gson.JsonObject;
+
 import cat.tecnocampus.AppPacFam.application.dto.PatientDTO;
 
 public interface PatientDAO {
@@ -18,6 +20,6 @@ public interface PatientDAO {
 
 	List<PatientDTO> getPatients();
 
-	void setNewPatient(PatientDTO patient);
+	JsonObject setNewPatient(PatientDTO patient);
 
 }
