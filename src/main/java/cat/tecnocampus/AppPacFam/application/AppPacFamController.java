@@ -101,6 +101,10 @@ public class AppPacFamController {
 		return patientDAO.getPatientByAnyCriteria(value);
 	}
 
+	public void modifyPatient(PatientDTO patient) {
+		 patientDAO.modifyPatient(patient);
+	}
+
 
 
 	// ******************
@@ -154,12 +158,5 @@ public class AppPacFamController {
 		return state;
 	}
 
-	
-	
-
-	
-
-
-	
 
 }

@@ -22,4 +22,6 @@ public interface PatientDAO {
 
 	JsonObject setNewPatient(PatientDTO patient);
 
+	void modifyPatient(PatientDTO patient);
+
 }

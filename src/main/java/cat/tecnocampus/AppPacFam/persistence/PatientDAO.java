@@ -136,4 +136,11 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 		return true;
 	}
 
+	@Override
+	public void modifyPatient(PatientDTO patient) {
+		final var query = "UPDATE patient SET patientName = ?, firstSurname = ?, secondSurname = ?, hospitalCareType = ?, healthCardIdentifier = ?  WHERE patientId = ?";
+		jdbcTemplate.update(query, patient.getPatientName(), patient.getFirstSurname(), patient.getSecondSurname(),
+				patient.getHospitalCareType().toString(), patient.getHealthCardIdentifier(), patient.getPatientId());
+	}
+
 }

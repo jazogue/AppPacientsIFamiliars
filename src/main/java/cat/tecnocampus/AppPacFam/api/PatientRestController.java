@@ -36,7 +36,7 @@ public class PatientRestController {
 	public PatientDTO getPatientByAnyCriteria(@PathVariable String value) {
 		return appPacFamController.getPatientByAnyCriteria(value);
 	}
-	
+
 	@GetMapping("/patients/new/int")
 	public int getManyNewPatients() {
 		return appPacFamController.getManyNewPatients();
@@ -51,12 +51,12 @@ public class PatientRestController {
 	public List<StateDTO> getStates() {
 		return appPacFamController.getStates();
 	}
-	
+
 	@GetMapping("/states/generic")
 	public List<StateDTO> getGenericStates() {
 		return appPacFamController.getTypedStates(true);
 	}
-	
+
 	@GetMapping("/states/custom")
 	public List<StateDTO> getCustomStates() {
 		return appPacFamController.getTypedStates(false);
@@ -66,12 +66,12 @@ public class PatientRestController {
 	public List<StateDTO> getStatesByPatientId(@PathVariable String id) {
 		return appPacFamController.getStatesByPatientId(id);
 	}
-	
+
 	@GetMapping("/states/patient/{id}/gen")
 	public List<StateDTO> getGenericStatesByPatientId(@PathVariable String id) {
 		return appPacFamController.getTypedStatesByPatientId(id, true);
 	}
-	
+
 	@GetMapping("/states/patient/{id}/per")
 	public List<StateDTO> getCustomStatesByPatientId(@PathVariable String id) {
 		return appPacFamController.getTypedStatesByPatientId(id, false);
@@ -93,23 +93,28 @@ public class PatientRestController {
 	}
 
 	@PostMapping("/patient")
-	public JsonObject postStudent(@RequestBody @Valid PatientDTO patient) {
-		 return appPacFamController.setNewPatient(patient);
+	public JsonObject postPatient(@RequestBody @Valid PatientDTO patient) {
+		return appPacFamController.setNewPatient(patient);
 	}
-	
+
+	@PostMapping("/patient/modify")
+	public void modifyPatient(@RequestBody @Valid PatientDTO patient) {
+		appPacFamController.modifyPatient(patient);
+	}
+
 	@PostMapping("/state/gen")
-    public void postGenericState(@RequestBody @Valid StateDTO state) {
-	 appPacFamController.setNewGenericState(state);
-    }
+	public void postGenericState(@RequestBody @Valid StateDTO state) {
+		appPacFamController.setNewGenericState(state);
+	}
 
 	@PostMapping("/state/generic/{stateId}/patient/{patientId}")
-    public void setNewGenericStateToPatient(@PathVariable String stateId, @PathVariable String patientId) {
-	 appPacFamController.setNewGenericStateToPatient(stateId, patientId);
-    }
-	
+	public void setNewGenericStateToPatient(@PathVariable String stateId, @PathVariable String patientId) {
+		appPacFamController.setNewGenericStateToPatient(stateId, patientId);
+	}
+
 	@PostMapping("/state/custom/patient/{patientId}")
-    public void setNewCustomStateToPatient(@RequestBody @Valid StateDTO state, @PathVariable String patientId) {
-	 appPacFamController.setNewCustomStateToPatient(state, patientId);
-    }
-	
+	public void setNewCustomStateToPatient(@RequestBody @Valid StateDTO state, @PathVariable String patientId) {
+		appPacFamController.setNewCustomStateToPatient(state, patientId);
+	}
+
 }
