@@ -4,20 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-
 public class Patient {
-	public enum HospitalCareType {quirurgic, urgencies}
-	
 	private String patientId;
 	private String patientName;
 	private String firstSurname;
 	private String secondSurname;
 	private String healthCardIdentifier;
-	private HospitalCareType hospitalCareType;
-	private List<State> states = new ArrayList<>();
+	private List<Admission> admissions = new ArrayList<>();
 
 	public Patient() {
-		this.patientId = UUID.randomUUID().toString().substring(0,5);
+		this.patientId = UUID.randomUUID().toString().substring(0, 5);
 	}
 
 	public String getPatientId() {
@@ -27,7 +23,6 @@ public class Patient {
 	public void setPatientId(String patientId) {
 		this.patientId = patientId;
 	}
-
 
 	public String getPatientName() {
 		return patientName;
@@ -53,28 +48,20 @@ public class Patient {
 		this.secondSurname = secondSurname;
 	}
 
-	public List<State> getStates() {
-		return states;
-	}
-
-	public void setStates(List<State> list) {
-		this.states = list;
-	}
-
-	public HospitalCareType getHospitalCareType() {
-		return hospitalCareType;
-	}
-
-	public void setHospitalCareType(HospitalCareType hospitalCareType) {
-		this.hospitalCareType = hospitalCareType;
-	}
-
 	public String getHealthCardIdentifier() {
 		return healthCardIdentifier;
 	}
 
 	public void setHealthCardIdentifier(String healthCardIdentifier) {
 		this.healthCardIdentifier = healthCardIdentifier;
+	}
+
+	public List<Admission> getAdmissions() {
+		return admissions;
+	}
+
+	public void setAdmissions(List<Admission> admissions) {
+		this.admissions = admissions;
 	}
 
 }

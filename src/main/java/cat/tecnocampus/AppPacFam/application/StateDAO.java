@@ -10,20 +10,16 @@ public interface StateDAO {
 
 	List<StateDTO> getStates();
 
-	List<StateDTO> getStatesByPatientId(String id);
-
-	int getManyNewStatesByPatientId(String id);
-
-	List<StateDTO> getNewStatesByPatientId(String id);
+	List<StateDTO> getStatesByAdmissionId(String id);
 
 	void setNewGenericState(StateDTO state);
 
-	List<StateDTO> getTypedStatesByPatientId(String id, boolean type);
+	List<StateDTO> getTypedStatesByPatientId(String id, boolean type, String idiom);
 
-	void setNewGenericStateToPatient(String stateId, String patientId);
+	void setNewGenericStateToPatient(String stateId, String admissionId);
 
-	void setNewCustomStateToPatient(StateDTO state, String patientId);
+	void setNewCustomStateToPatient(StateDTO state, String admissionId);
 
-	List<StateDTO> getTypedStates(boolean type);
+	List<StateDTO> getTypedStates(boolean type, String idiom);
 
 }

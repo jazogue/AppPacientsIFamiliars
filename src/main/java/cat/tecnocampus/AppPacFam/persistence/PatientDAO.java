@@ -39,8 +39,6 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 		patient.setFirstSurname(resultSet.getString("firstSurname"));
 		patient.setSecondSurname(resultSet.getString("secondSurname"));
 		patient.setHealthCardIdentifier(resultSet.getString("healthCardIdentifier"));
-		patient.setStates(null);
-		patient.setHospitalCareType(Patient.HospitalCareType.valueOf(resultSet.getString("hospitalCareType")));
 
 		return patient;
 	};
@@ -53,10 +51,12 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 
 	@Override
 	public List<PatientDTO> getPatients() {
-		final var query = "select patientId, patientName, firstSurname, secondSurname, hospitalCareType, healthCardIdentifier from patient";
+		final var query = "select patientId, patientName, firstSurname, secondSurname, healthCardIdentifier from patient";
 
 		return jdbcTemplate.query(query, patientsRowMapper);
 	}
+	
+	//obtener hospital care type
 
 	@Override
 	public PatientDTO getPatientById(String id) {
@@ -85,33 +85,14 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 	}
 
 	@Override
-	public int getManyNewPatients() {
-		final var query = "SELECT COUNT(checked) FROM patient WHERE checked = FALSE;";
-		return jdbcTemplate.queryForObject(query, Integer.class);
-	}
-
-	@Override
-	public List<PatientDTO> getNewPatients() {
-		final var query = "SELECT patientId, patientName, firstSurname, secondSurname, hospitalCareType, healthCardIdentifier"
-				+ " FROM patient WHERE checked = FALSE FOR UPDATE;";
-
-		List<PatientDTO> patients = jdbcTemplate.query(query, patientsRowMapper);
-
-		final var queryUpdate = "UPDATE patient SET checked = TRUE WHERE checked = FALSE;";
-		jdbcTemplate.update(queryUpdate);
-
-		return patients;
-	}
-
-	@Override
 	public JsonObject setNewPatient(PatientDTO patient) {
 		if(existPatientByHealthCardIdentifier(patient.getHealthCardIdentifier())) {
 				throw new PatientAlreadyExistsException(patient.getHealthCardIdentifier());
 		}
 		
-		final var query = "INSERT INTO patient (patientId, patientName, firstSurname, secondSurname, hospitalCareType, healthCardIdentifier) VALUES (?, ?, ?, ?, ?, ?)";
+		final var query = "INSERT INTO patient (patientId, patientName, firstSurname, secondSurname, healthCardIdentifier) VALUES (?, ?, ?, ?, ?)";
 		jdbcTemplate.update(query, patient.getPatientId(), patient.getPatientName(), patient.getFirstSurname(),
-				patient.getSecondSurname(), patient.getHospitalCareType().toString(), patient.getHealthCardIdentifier());
+				patient.getSecondSurname(), patient.getHealthCardIdentifier());
 		
 		return JsonParser.parseString("{'id': '"+ patient.getPatientId() +"'}").getAsJsonObject();
 	}
@@ -138,9 +119,9 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 
 	@Override
 	public void modifyPatient(PatientDTO patient) {
-		final var query = "UPDATE patient SET patientName = ?, firstSurname = ?, secondSurname = ?, hospitalCareType = ?, healthCardIdentifier = ?  WHERE patientId = ?";
+		final var query = "UPDATE patient SET patientName = ?, firstSurname = ?, secondSurname = ?, healthCardIdentifier = ?  WHERE patientId = ?";
 		jdbcTemplate.update(query, patient.getPatientName(), patient.getFirstSurname(), patient.getSecondSurname(),
-				patient.getHospitalCareType().toString(), patient.getHealthCardIdentifier(), patient.getPatientId());
+				 patient.getHealthCardIdentifier(), patient.getPatientId());
 	}
 
 }

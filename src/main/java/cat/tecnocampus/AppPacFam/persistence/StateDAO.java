@@ -7,13 +7,10 @@ import java.util.UUID;
 import org.simpleflatmapper.jdbc.spring.JdbcTemplateMapperFactory;
 import org.simpleflatmapper.jdbc.spring.ResultSetExtractorImpl;
 import org.simpleflatmapper.jdbc.spring.RowMapperImpl;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import cat.tecnocampus.AppPacFam.application.dto.PatientDTO;
 import cat.tecnocampus.AppPacFam.application.dto.StateDTO;
-import cat.tecnocampus.AppPacFam.application.exception.PatientNotFoundException;
 
 @Repository // @Component
 public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO {
@@ -30,56 +27,35 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 	RowMapperImpl<StateDTO> stateRowMapper = JdbcTemplateMapperFactory.newInstance().addKeys("stateId")
 			.newRowMapper(StateDTO.class);
 
-
 	@Override
 	public List<StateDTO> getStates() {
-		final var query = "select state.stateId, state.stateName, state.stateType, treatment_event.startTime from state inner join treatment_event on "+ 
-				"state.stateId = treatment_event.stateId";
+		final var query = "select state.stateId, state.stateName, state.stateType, treatment_event.startTime from state inner join treatment_event on "
+				+ "state.stateId = treatment_event.stateId";
 
 		var result = jdbcTemplate.query(query, statesRowMapper);
-		result.sort((o1,o2) -> o1.getStartTime().compareTo(o2.getStartTime()));
-		return result;
-	}
-
-	public List<StateDTO> getStatesByPatientId(String id) {
-		final var query = "select state.stateId, state.stateName, state.stateType, treatment_event.startTime from state inner join treatment_event on "
-				+ "state.stateId = treatment_event.stateId inner join patient on treatment_event.patientId = patient.patientId where patient.patientId = ?";
-
-		var result = jdbcTemplate.query(query, statesRowMapper, id);
-		result.sort((o1,o2) -> o1.getStartTime().compareTo(o2.getStartTime()));
+		result.sort((o1, o2) -> o1.getStartTime().compareTo(o2.getStartTime()));
 		return result;
 	}
 
 	@Override
-	public int getManyNewStatesByPatientId(String id) {
-		final var query = "SELECT COUNT(state.checked) from state right outer join treatment_event on "
-				+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.checked = FALSE AND patient.patientId = ?);";
-
-		return jdbcTemplate.queryForObject(query, Integer.class, id);
-	}
-
-	@Override
-	public List<StateDTO> getNewStatesByPatientId(String id) {
-		final var query = "SELECT state.stateId, state.stateName, state.stateType, treatment_event.startTime from state right outer join treatment_event on "
-				+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.checked = FALSE AND patient.patientId = ?);";
+	public List<StateDTO> getStatesByAdmissionId(String id) {
+		final var query = "select state.stateId, translation.translatedText, state.stateType, treatment_event.startTime from translation right outer join state on translation.stateId = state.stateId right outer join treatment_event on "
+				+ "state.stateId = treatment_event.stateId right outer join admission on treatment_event.admissionId = admission.admissionId where admission.admissionId = ?";
 
 		var result = jdbcTemplate.query(query, statesRowMapper, id);
-
-		final var queryUpdate = "UPDATE state SET checked = TRUE WHERE checked = FALSE;";
-		jdbcTemplate.update(queryUpdate);
-
+		result.sort((o1, o2) -> o1.getStartTime().compareTo(o2.getStartTime()));
 		return result;
 	}
-	
-	public List<StateDTO> getTypedStatesByPatientId(String id, boolean type){
+
+	public List<StateDTO> getTypedStatesByPatientId(String id, boolean type, String idiom) {
 		var query = "";
-		if(type)
-		 query = "SELECT state.stateId, state.stateName, state.stateType, treatment_event.startTime from state right outer join treatment_event on "
-				+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.stateType = 'generic' AND patient.patientId = ?);";
+		if (type)
+			query = "SELECT state.stateId, translation.translatedText, state.stateType, treatment_event.startTime from translation right outer join state on translation.stateId = state.stateId state right outer join treatment_event on "
+					+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.stateType = 'generic' AND patient.patientId = ? AND translation.translationIdiom = ?);";
 		else
-			query = "SELECT state.stateId, state.stateName, state.stateType, treatment_event.startTime from state right outer join treatment_event on "
-					+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.stateType = 'personalitzat' AND patient.patientId = ?);";
-		var result = jdbcTemplate.query(query, statesRowMapper, id);
+			query = "SELECT state.stateId, translation.translatedText, state.stateType, treatment_event.startTime from translation right outer join state on translation.stateId = state.stateId state right outer join treatment_event on "
+					+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.stateType = 'personalitzat' AND patient.patientId = ? AND translation.translationIdiom = ?);";
+		var result = jdbcTemplate.query(query, statesRowMapper, id, idiom);
 
 		final var queryUpdate = "UPDATE state SET checked = TRUE WHERE checked = FALSE;";
 		jdbcTemplate.update(queryUpdate);
@@ -90,37 +66,39 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 	@Override
 	public void setNewGenericState(StateDTO state) {
 		final var query1 = "INSERT INTO state (stateId, stateName, stateType) VALUES (?, ?, ?)";
-        jdbcTemplate.update(query1, state.getStateId(), state.getStateName(), state.getStateType().toString());
-	}
-	
-
-	@Override
-	public void setNewGenericStateToPatient(String stateId, String patientId) {
-		final var query = "INSERT INTO treatment_event (eventId, startTime, stateId, patientId) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(query, UUID.randomUUID().toString(), new Date(), stateId, patientId);
-        
-	}
-	
-	@Override
-	public void setNewCustomStateToPatient(StateDTO state, String patientId) {
-		final var query1 = "INSERT INTO state (stateId, stateName, stateType) VALUES (?, ?, ?)";
-		final var query2 = "INSERT INTO treatment_event (eventId, startTime, stateId, patientId) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(query1, state.getStateId(), state.getStateName(), state.getStateType().toString());
-        jdbcTemplate.update(query2, UUID.randomUUID().toString(), new Date(), state.getStateId(), patientId);
-        
+		jdbcTemplate.update(query1, state.getStateId(), state.getStateType().toString());
 	}
 
 	@Override
-	public List<StateDTO> getTypedStates(boolean type) {
+	public void setNewGenericStateToPatient(String stateId, String admissionId) {
+		final var query2 = "INSERT INTO treatment_event (eventId, startTime, admissionId, stateId) VALUES (?, ?, ?, ?)";
+		jdbcTemplate.update(query2, UUID.randomUUID().toString(), new Date(), admissionId, stateId);
+	}
+
+	@Override
+	public void setNewCustomStateToPatient(StateDTO state, String admissionId) {
+		String stateId = UUID.randomUUID().toString();
+
+		final var query1 = "INSERT INTO state (stateId, stateType) VALUES (?, ?)";
+		final var query2 = "INSERT INTO treatment_event (eventId, startTime, admissionId, stateId) VALUES (?, ?, ?, ?)";
+		final var query3 = "INSERT INTO translation (translationId, translatedText, translationIdiom, stateId) VALUES (?, ?, ?, ?)";
+		jdbcTemplate.update(query1, stateId, state.getStateType().toString());
+		jdbcTemplate.update(query2, UUID.randomUUID().toString(), new Date(), admissionId, stateId);
+		jdbcTemplate.update(query3, UUID.randomUUID().toString(), state.getTranslatedText(), "ca", stateId);
+
+	}
+
+	@Override
+	public List<StateDTO> getTypedStates(boolean type, String idiom) {
 		var query = "";
-		 if(type)
-			 query = "SELECT stateId, stateName, stateType from state WHERE (state.stateType = 'generic');";
-		 else
-			 query = "SELECT stateId, stateName, stateType from state WHERE (state.stateType = 'personalitzat');";
-		 
-			var result = jdbcTemplate.query(query, statesRowMapper);
+		if (type)
+			query = "SELECT state.stateId, translation.translatedText, state.stateType from state right outer join translation on state.stateId = translation.stateId WHERE (state.stateType = 'generic' AND translation.translationIdiom = ?);";
+		else
+			query = "SELECT state.stateId, translation.translatedText, state.stateType from state right outer join translation on state.stateId = translation.stateId WHERE (state.stateType = 'personalitzat' AND translation.translationIdiom = ?);";
 
-			return result;
+		var result = jdbcTemplate.query(query, statesRowMapper, idiom);
+
+		return result;
 	}
 
 }

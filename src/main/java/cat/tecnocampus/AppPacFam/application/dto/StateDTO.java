@@ -1,7 +1,9 @@
 package cat.tecnocampus.AppPacFam.application.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
@@ -13,13 +15,12 @@ public class StateDTO {
 	@NotNull(message = "Id cannot be null")
 	@NotBlank(message = "Id cannot be blank")
 	private String stateId;
-	@NotNull(message = "Id cannot be null")
-	@NotBlank(message = "Id cannot be blank")
-	private String stateName;
-	@NotNull(message = "Start time cannot be null")
 	private Date startTime;
 	@NotNull(message = "State type cannot be null")
 	private StateType stateType;
+	private List<TranslationDTO> translations = new ArrayList<>();
+	private String location;
+	private String translatedText;
 
 	public StateDTO() {
 		this.stateId = UUID.randomUUID().toString();
@@ -31,14 +32,6 @@ public class StateDTO {
 
 	public void setStateId(String stateId) {
 		this.stateId = stateId;
-	}
-
-	public String getStateName() {
-		return stateName;
-	}
-
-	public void setStateName(String stateName) {
-		this.stateName = stateName;
 	}
 
 	public Date getStartTime() {
@@ -55,5 +48,29 @@ public class StateDTO {
 
 	public void setStateType(StateType stateType) {
 		this.stateType = stateType;
+	}
+
+	public List<TranslationDTO> getTranslations() {
+		return translations;
+	}
+
+	public void setTranslations(List<TranslationDTO> translations) {
+		this.translations = translations;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getTranslatedText() {
+		return translatedText;
+	}
+
+	public void setTranslatedText(String translatedText) {
+		this.translatedText = translatedText;
 	}
 }

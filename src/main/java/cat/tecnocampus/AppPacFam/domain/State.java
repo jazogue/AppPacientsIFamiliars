@@ -7,9 +7,10 @@ public class State {
 	public enum StateType {personalitzat, generic}
 	
 	private String stateId;
-	private String stateName;
 	private StateType stateType;
 	private Date startTime;
+	private String locationName;
+	private String translatedText;
 	
 	public State() {
 		this.stateId = UUID.randomUUID().toString();
@@ -22,13 +23,13 @@ public class State {
 	public void setStateId(String stateId) {
 		this.stateId = stateId;
 	}
-
-	public String getStateName() {
-		return stateName;
+	
+	public StateType getStateType() {
+		return stateType;
 	}
 
-	public void setStateName(String stateName) {
-		this.stateName = stateName;
+	public void setStateType(StateType stateType) {
+		this.stateType = stateType;
 	}
 
 	public Date getStartTime() {
@@ -38,13 +39,21 @@ public class State {
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
-	
-	public StateType getStateType() {
-		return stateType;
+
+	public String getLocationName() {
+		return locationName;
 	}
 
-	public void setStateType(StateType stateType) {
-		this.stateType = stateType;
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
+	}
+
+	public String getTranslatedText() {
+		return translatedText;
+	}
+
+	public void setTranslatedText(String translatedText) {
+		this.translatedText = translatedText;
 	}
 
 }
