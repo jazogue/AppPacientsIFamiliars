@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import cat.tecnocampus.AppPacFam.application.AppPacFamController;
 import cat.tecnocampus.AppPacFam.application.dto.AdmissionDTO;
+import cat.tecnocampus.AppPacFam.application.dto.LocationDTO;
 import cat.tecnocampus.AppPacFam.application.dto.PatientDTO;
 import cat.tecnocampus.AppPacFam.application.dto.StateDTO;
 
@@ -96,9 +97,9 @@ public class PatientRestController {
 		return appPacFamController.getTypedStates(false, idiom);
 	}
 
-	@GetMapping("/states/admission/{id}")
-	public List<StateDTO> getStatesByAdmissionId(@PathVariable String id) {
-		return appPacFamController.getStatesByAdmissionId(id);
+	@GetMapping("/states/admission/{id}/idiom/{idiom}")
+	public List<StateDTO> getStatesByAdmissionId(@PathVariable String id, @PathVariable String idiom) {
+		return appPacFamController.getStatesByAdmissionId(id, idiom);
 	}
 
 	@GetMapping("/states/patient/{id}/gen/{idiom}")
@@ -124,6 +125,12 @@ public class PatientRestController {
 	@PostMapping("/state/custom/admission/{admissionId}")
 	public void setNewCustomStateToPatient(@RequestBody @Valid StateDTO state, @PathVariable String admissionId) {
 		appPacFamController.setNewCustomStateToPatient(state, admissionId);
+	}
+	
+	// LOCATIONS
+	@GetMapping("/locations")
+	public List<LocationDTO> getAllLocations() {
+		return appPacFamController.getAllLocations();
 	}
 
 }

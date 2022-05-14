@@ -10,7 +10,7 @@ public interface StateDAO {
 
 	List<StateDTO> getStates();
 
-	List<StateDTO> getStatesByAdmissionId(String id);
+	List<StateDTO> getStatesByAdmissionId(String id, String idiom);
 
 	void setNewGenericState(StateDTO state);
 

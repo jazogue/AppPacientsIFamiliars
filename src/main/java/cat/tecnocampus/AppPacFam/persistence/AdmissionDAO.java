@@ -16,7 +16,7 @@ import cat.tecnocampus.AppPacFam.application.exception.PatientNotFoundException;
 import cat.tecnocampus.AppPacFam.domain.Admission;
 import cat.tecnocampus.AppPacFam.domain.Admission.HospitalCareType;
 
-@Repository // @Component
+@Repository
 public class AdmissionDAO implements cat.tecnocampus.AppPacFam.application.AdmissionDAO {
 
 	private JdbcTemplate jdbcTemplate;

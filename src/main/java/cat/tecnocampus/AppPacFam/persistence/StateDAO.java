@@ -11,8 +11,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import cat.tecnocampus.AppPacFam.application.dto.StateDTO;
+import cat.tecnocampus.AppPacFam.domain.Translation.TranslationIdiom;
 
-@Repository // @Component
+@Repository
 public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO {
 
 	private JdbcTemplate jdbcTemplate;
@@ -38,11 +39,11 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 	}
 
 	@Override
-	public List<StateDTO> getStatesByAdmissionId(String id) {
-		final var query = "select state.stateId, translation.translatedText, state.stateType, treatment_event.startTime from translation right outer join state on translation.stateId = state.stateId right outer join treatment_event on "
-				+ "state.stateId = treatment_event.stateId right outer join admission on treatment_event.admissionId = admission.admissionId where admission.admissionId = ?";
+	public List<StateDTO> getStatesByAdmissionId(String id, String idiom) {
+		final var query = "select state.stateId, translation.translatedText, state.stateType, treatment_event.startTime from translation inner join state on translation.stateId = state.stateId inner join treatment_event on "
+				+ "state.stateId = treatment_event.stateId inner join admission on treatment_event.admissionId = admission.admissionId where admission.admissionId = ? AND translation.translationIdiom = ? OR translation.translationIdiom = 'any'";
 
-		var result = jdbcTemplate.query(query, statesRowMapper, id);
+		var result = jdbcTemplate.query(query, statesRowMapper, id, idiom);
 		result.sort((o1, o2) -> o1.getStartTime().compareTo(o2.getStartTime()));
 		return result;
 	}
@@ -79,12 +80,12 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 	public void setNewCustomStateToPatient(StateDTO state, String admissionId) {
 		String stateId = UUID.randomUUID().toString();
 
-		final var query1 = "INSERT INTO state (stateId, stateType) VALUES (?, ?)";
+		final var query1 = "INSERT INTO state (stateId, stateType, locationId) VALUES (?, ?, ?)";
 		final var query2 = "INSERT INTO treatment_event (eventId, startTime, admissionId, stateId) VALUES (?, ?, ?, ?)";
 		final var query3 = "INSERT INTO translation (translationId, translatedText, translationIdiom, stateId) VALUES (?, ?, ?, ?)";
-		jdbcTemplate.update(query1, stateId, state.getStateType().toString());
+		jdbcTemplate.update(query1, stateId, state.getStateType().toString(), state.getLocation());
 		jdbcTemplate.update(query2, UUID.randomUUID().toString(), new Date(), admissionId, stateId);
-		jdbcTemplate.update(query3, UUID.randomUUID().toString(), state.getTranslatedText(), "ca", stateId);
+		jdbcTemplate.update(query3, UUID.randomUUID().toString(), state.getTranslatedText(), TranslationIdiom.any.toString(), stateId);
 
 	}
 

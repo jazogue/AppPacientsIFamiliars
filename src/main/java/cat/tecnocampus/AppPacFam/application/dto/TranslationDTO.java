@@ -2,23 +2,31 @@ package cat.tecnocampus.AppPacFam.application.dto;
 
 import java.util.UUID;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import cat.tecnocampus.AppPacFam.domain.Translation.TranslationIdiom;
 
 public class TranslationDTO {
-	private String locationId;
+	@NotNull(message = "Translation id cannot be null")
+	@NotBlank(message = "Translation id cannot be blank")
+	private String translationId;
+	@NotNull(message = "Translated text cannot be null")
+	@NotBlank(message = "Translated text cannot be blank")
 	private String translatedText;
+	@NotNull(message = "Translation idiom cannot be null")
 	private TranslationIdiom translationIdiom;
 
 	public TranslationDTO() {
-		this.locationId = UUID.randomUUID().toString();
+		this.translationId = UUID.randomUUID().toString();
 	}
 
-	public String getLocationId() {
-		return locationId;
+	public String getTranslationId() {
+		return translationId;
 	}
 
-	public void setLocationId(String locationId) {
-		this.locationId = locationId;
+	public void setTranslationId(String translationId) {
+		this.translationId = translationId;
 	}
 
 	public String getTranslatedText() {

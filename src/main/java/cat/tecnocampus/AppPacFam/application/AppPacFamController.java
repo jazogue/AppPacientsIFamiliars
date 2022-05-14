@@ -1,6 +1,7 @@
 package cat.tecnocampus.AppPacFam.application;
 
 import cat.tecnocampus.AppPacFam.application.dto.AdmissionDTO;
+import cat.tecnocampus.AppPacFam.application.dto.LocationDTO;
 import cat.tecnocampus.AppPacFam.application.dto.PatientDTO;
 import cat.tecnocampus.AppPacFam.application.dto.StateDTO;
 
@@ -15,11 +16,13 @@ public class AppPacFamController {
 	private PatientDAO patientDAO;
 	private StateDAO stateDAO;
 	private AdmissionDAO admissionDAO;
+	private LocationDAO locationDAO;
 
-	public AppPacFamController(PatientDAO patientDAO, StateDAO stateDAO, AdmissionDAO admissionDAO) {
+	public AppPacFamController(PatientDAO patientDAO, StateDAO stateDAO, AdmissionDAO admissionDAO, LocationDAO locationDAO) {
 		this.patientDAO = patientDAO;
 		this.stateDAO = stateDAO;
 		this.admissionDAO = admissionDAO;
+		this.locationDAO = locationDAO;
 	}
 
 	public List<PatientDTO> getPatients() {
@@ -34,8 +37,8 @@ public class AppPacFamController {
 		return stateDAO.getStates();
 	}
 
-	public List<StateDTO> getStatesByAdmissionId(String id) {
-		return stateDAO.getStatesByAdmissionId(id);
+	public List<StateDTO> getStatesByAdmissionId(String id, String idiom) {
+		return stateDAO.getStatesByAdmissionId(id, idiom);
 	}
 
 	public PatientDTO getPatientSummaryById(String id) {
@@ -96,6 +99,10 @@ public class AppPacFamController {
 
 	public void modifyAdmissionTypeByPatientId(String patientId) {
 		admissionDAO.modifyAdmissionTypeByPatientId(patientId);
+	}
+
+	public List<LocationDTO> getAllLocations() {
+		return locationDAO.getAllLocations();
 	}
 
 }

@@ -18,7 +18,7 @@ import cat.tecnocampus.AppPacFam.application.exception.PatientAlreadyExistsExcep
 import cat.tecnocampus.AppPacFam.application.exception.PatientNotFoundException;
 import cat.tecnocampus.AppPacFam.domain.Patient;
 
-@Repository // @Component
+@Repository
 public class PatientDAO implements cat.tecnocampus.AppPacFam.application.PatientDAO {
 
 	private JdbcTemplate jdbcTemplate;

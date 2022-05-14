@@ -4,23 +4,23 @@ import java.util.UUID;
 
 public class Translation {
 	public enum TranslationIdiom {
-		ca, es, en
+		ca, es, en, any
 	}
 
-	private String locationId;
+	private String translationId;
 	private String translatedText;
 	private TranslationIdiom translationIdiom;
 
 	public Translation() {
-		this.locationId = UUID.randomUUID().toString();
+		this.translationId = UUID.randomUUID().toString();
 	}
 
-	public String getLocationId() {
-		return locationId;
+	public String getTranslationId() {
+		return translationId;
 	}
 
-	public void setLocationId(String locationId) {
-		this.locationId = locationId;
+	public void setTranslationId(String translationId) {
+		this.translationId = translationId;
 	}
 
 	public String getTranslatedText() {
