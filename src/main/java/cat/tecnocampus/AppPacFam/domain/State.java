@@ -11,7 +11,7 @@ public class State {
 	private Date startTime;
 	private String locationName;
 	private String translatedText;
-
+	
 	public State() {
 		this.stateId = UUID.randomUUID().toString();
 	}

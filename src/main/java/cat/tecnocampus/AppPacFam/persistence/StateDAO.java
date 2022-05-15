@@ -22,7 +22,10 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	ResultSetExtractorImpl<StateDTO> statesRowMapper = JdbcTemplateMapperFactory.newInstance().addKeys("stateId")
+	ResultSetExtractorImpl<StateDTO> statesRowMapper = JdbcTemplateMapperFactory.newInstance().addKeys("startTime")
+			.newResultSetExtractor(StateDTO.class);
+	
+	ResultSetExtractorImpl<StateDTO> statesRowMapperDefault = JdbcTemplateMapperFactory.newInstance().addKeys("stateId")
 			.newResultSetExtractor(StateDTO.class);
 
 	RowMapperImpl<StateDTO> stateRowMapper = JdbcTemplateMapperFactory.newInstance().addKeys("stateId")
@@ -33,7 +36,7 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 		final var query = "select state.stateId, state.stateName, state.stateType, treatment_event.startTime from state inner join treatment_event on "
 				+ "state.stateId = treatment_event.stateId";
 
-		var result = jdbcTemplate.query(query, statesRowMapper);
+		var result = jdbcTemplate.query(query, statesRowMapperDefault);
 		result.sort((o1, o2) -> o1.getStartTime().compareTo(o2.getStartTime()));
 		return result;
 	}
@@ -56,7 +59,7 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 		else
 			query = "SELECT state.stateId, translation.translatedText, state.stateType, treatment_event.startTime from translation right outer join state on translation.stateId = state.stateId state right outer join treatment_event on "
 					+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.stateType = 'personalitzat' AND patient.patientId = ? AND translation.translationIdiom = ?);";
-		var result = jdbcTemplate.query(query, statesRowMapper, id, idiom);
+		var result = jdbcTemplate.query(query, statesRowMapperDefault, id, idiom);
 
 		final var queryUpdate = "UPDATE state SET checked = TRUE WHERE checked = FALSE;";
 		jdbcTemplate.update(queryUpdate);
