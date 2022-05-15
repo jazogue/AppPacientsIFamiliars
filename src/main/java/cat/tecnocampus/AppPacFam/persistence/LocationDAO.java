@@ -18,7 +18,6 @@ public class LocationDAO implements cat.tecnocampus.AppPacFam.application.Locati
 	public LocationDAO(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
-
 	
 	ResultSetExtractorImpl<LocationDTO> locationsRowMapper = JdbcTemplateMapperFactory.newInstance().addKeys("locationId")
 			.newResultSetExtractor(LocationDTO.class);
@@ -32,5 +31,28 @@ public class LocationDAO implements cat.tecnocampus.AppPacFam.application.Locati
 
 		return jdbcTemplate.query(query, locationsRowMapper);
 	}
+
+	@Override
+	public void setNewLocation(LocationDTO location) {
+		final var query = "INSERT INTO location (locationId, locationName) VALUES (?, ?)";
+
+		jdbcTemplate.update(query, location.getLocationId(), location.getLocationName());
+	}
+
+	@Override
+	public LocationDTO getLocationById(String locationId) {
+		final var query = "select locationId, locationName from location where locationId = ?";
+
+		return jdbcTemplate.queryForObject(query, locationRowMapper, locationId);
+	}
+
+	@Override
+	public List<LocationDTO> getLocationsByPatientId(String patientId) {
+		final var query = "select location.locationId, location.locationName from location right outer join state on location.locationId = state.locationId right outer join treatment_event on state.stateId = treatment_event.stateId right outer join admission on admission.admissionId = treatment_event.admissionId where patientId = ?";
+
+		return jdbcTemplate.query(query, locationsRowMapper, patientId);
+	}
+	
+	
 
 }

@@ -4,6 +4,7 @@ import cat.tecnocampus.AppPacFam.application.dto.AdmissionDTO;
 import cat.tecnocampus.AppPacFam.application.dto.LocationDTO;
 import cat.tecnocampus.AppPacFam.application.dto.PatientDTO;
 import cat.tecnocampus.AppPacFam.application.dto.StateDTO;
+import cat.tecnocampus.AppPacFam.application.dto.TranslationDTO;
 
 import org.springframework.stereotype.Service;
 
@@ -11,18 +12,24 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 @Service // same as @Component
 public class AppPacFamController {
 	private PatientDAO patientDAO;
 	private StateDAO stateDAO;
 	private AdmissionDAO admissionDAO;
 	private LocationDAO locationDAO;
+	private TranslationDAO translationDAO;
 
-	public AppPacFamController(PatientDAO patientDAO, StateDAO stateDAO, AdmissionDAO admissionDAO, LocationDAO locationDAO) {
+	public AppPacFamController(PatientDAO patientDAO, StateDAO stateDAO, AdmissionDAO admissionDAO,
+			LocationDAO locationDAO, TranslationDAO translationDAO) {
 		this.patientDAO = patientDAO;
 		this.stateDAO = stateDAO;
 		this.admissionDAO = admissionDAO;
 		this.locationDAO = locationDAO;
+		this.translationDAO = translationDAO;
+
 	}
 
 	public List<PatientDTO> getPatients() {
@@ -103,6 +110,26 @@ public class AppPacFamController {
 
 	public List<LocationDTO> getAllLocations() {
 		return locationDAO.getAllLocations();
+	}
+
+	public void setNewLocation(LocationDTO location) {
+		locationDAO.setNewLocation(location);
+	}
+
+	public LocationDTO getLocationById(String locationId) {
+		return locationDAO.getLocationById(locationId);
+	}
+
+	public List<LocationDTO> getLocationsByPatientId(String patientId) {
+		return locationDAO.getLocationsByPatientId(patientId);
+	}
+
+	public List<TranslationDTO> getTranslationsByStateId(String stateId) {
+		return translationDAO.getTranslationsByStateId(stateId);
+	}
+
+	public void setNewTranslation(TranslationDTO translation, String stateId) {
+		translationDAO.setNewTranslation(translation, stateId);
 	}
 
 }

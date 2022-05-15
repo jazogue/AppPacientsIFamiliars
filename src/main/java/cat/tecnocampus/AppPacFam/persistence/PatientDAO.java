@@ -30,10 +30,10 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 	private final RowMapper<PatientDTO> patientRowMapperLazy = (resultSet, i) -> {
 
 		PatientDTO patient = new PatientDTO();
-		
-		while(this.existPatientById(patient.getPatientId()))
-				patient = new PatientDTO();
-			
+
+		while (this.existPatientById(patient.getPatientId()))
+			patient = new PatientDTO();
+
 		patient.setPatientId(resultSet.getString("patientId"));
 		patient.setPatientName(resultSet.getString("patientName"));
 		patient.setFirstSurname(resultSet.getString("firstSurname"));
@@ -55,8 +55,8 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 
 		return jdbcTemplate.query(query, patientsRowMapper);
 	}
-	
-	//obtener hospital care type
+
+	// obtener hospital care type
 
 	@Override
 	public PatientDTO getPatientById(String id) {
@@ -67,10 +67,10 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 			throw new PatientNotFoundException(id);
 		}
 	}
-	
+
 	@Override
 	public PatientDTO getPatientByAnyCriteria(String value) {
-		 var query = "select * from patient where patientId = ?";
+		var query = "select * from patient where patientId = ?";
 		try {
 			return jdbcTemplate.queryForObject(query, patientRowMapperLazy, value);
 		} catch (EmptyResultDataAccessException e) {
@@ -81,22 +81,22 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 				throw new PatientNotFoundException(value);
 			}
 		}
-		
+
 	}
 
 	@Override
 	public JsonObject setNewPatient(PatientDTO patient) {
-		if(existPatientByHealthCardIdentifier(patient.getHealthCardIdentifier())) {
-				throw new PatientAlreadyExistsException(patient.getHealthCardIdentifier());
+		if (existPatientByHealthCardIdentifier(patient.getHealthCardIdentifier())) {
+			throw new PatientAlreadyExistsException(patient.getHealthCardIdentifier());
 		}
-		
+
 		final var query = "INSERT INTO patient (patientId, patientName, firstSurname, secondSurname, healthCardIdentifier) VALUES (?, ?, ?, ?, ?)";
 		jdbcTemplate.update(query, patient.getPatientId(), patient.getPatientName(), patient.getFirstSurname(),
 				patient.getSecondSurname(), patient.getHealthCardIdentifier());
-		
-		return JsonParser.parseString("{'id': '"+ patient.getPatientId() +"'}").getAsJsonObject();
+
+		return JsonParser.parseString("{'id': '" + patient.getPatientId() + "'}").getAsJsonObject();
 	}
-	
+
 	private boolean existPatientById(String patientId) {
 		final var query = "select * from patient where patientId = ?";
 		try {
@@ -106,7 +106,7 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 		}
 		return true;
 	}
-	
+
 	private boolean existPatientByHealthCardIdentifier(String healthCardIdentifier) {
 		final var query = "select * from patient where healthCardIdentifier = ?";
 		try {
@@ -121,7 +121,7 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 	public void modifyPatient(PatientDTO patient) {
 		final var query = "UPDATE patient SET patientName = ?, firstSurname = ?, secondSurname = ?, healthCardIdentifier = ?  WHERE patientId = ?";
 		jdbcTemplate.update(query, patient.getPatientName(), patient.getFirstSurname(), patient.getSecondSurname(),
-				 patient.getHealthCardIdentifier(), patient.getPatientId());
+				patient.getHealthCardIdentifier(), patient.getPatientId());
 	}
 
 }

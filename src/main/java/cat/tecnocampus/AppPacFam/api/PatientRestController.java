@@ -9,6 +9,7 @@ import cat.tecnocampus.AppPacFam.application.dto.AdmissionDTO;
 import cat.tecnocampus.AppPacFam.application.dto.LocationDTO;
 import cat.tecnocampus.AppPacFam.application.dto.PatientDTO;
 import cat.tecnocampus.AppPacFam.application.dto.StateDTO;
+import cat.tecnocampus.AppPacFam.application.dto.TranslationDTO;
 
 import java.util.List;
 
@@ -126,11 +127,37 @@ public class PatientRestController {
 	public void setNewCustomStateToPatient(@RequestBody @Valid StateDTO state, @PathVariable String admissionId) {
 		appPacFamController.setNewCustomStateToPatient(state, admissionId);
 	}
-	
+
 	// LOCATIONS
 	@GetMapping("/locations")
 	public List<LocationDTO> getAllLocations() {
 		return appPacFamController.getAllLocations();
+	}
+
+	@GetMapping("/location/{locationId}")
+	public LocationDTO getLocationById(@PathVariable String locationId) {
+		return appPacFamController.getLocationById(locationId);
+	}
+
+	@PostMapping("/location")
+	public void postLocation(@RequestBody @Valid LocationDTO location) {
+		appPacFamController.setNewLocation(location);
+	}
+
+	@GetMapping("/location/{patientId}")
+	public List<LocationDTO> getLocationsByPatientId(@PathVariable String patientId) {
+		return appPacFamController.getLocationsByPatientId(patientId);
+	}
+
+	// TRANSLATIONS
+	@PostMapping("/translation/state/{stateId}")
+	public void postTranslation(@RequestBody @Valid TranslationDTO translation, @PathVariable String stateId) {
+		appPacFamController.setNewTranslation(translation, stateId);
+	}
+
+	@GetMapping("/translations/{stateId}")
+	public List<TranslationDTO> getTranslationsByStateId(@PathVariable String stateId) {
+		return appPacFamController.getTranslationsByStateId(stateId);
 	}
 
 }
