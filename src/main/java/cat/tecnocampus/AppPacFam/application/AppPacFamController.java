@@ -100,8 +100,8 @@ public class AppPacFamController {
 		admissionDAO.setNewAdmission(admission, patientId);
 	}
 
-	public void modifyAdmission(AdmissionDTO admission) {
-		admissionDAO.modifyAdmission(admission);
+	public void addFinishDate(String admissionId) {
+		admissionDAO.addFinishDate(admissionId);
 	}
 
 	public void modifyAdmissionTypeByPatientId(String patientId) {

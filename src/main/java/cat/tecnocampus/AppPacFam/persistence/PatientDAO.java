@@ -56,8 +56,6 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 		return jdbcTemplate.query(query, patientsRowMapper);
 	}
 
-	// obtener hospital care type
-
 	@Override
 	public PatientDTO getPatientById(String id) {
 		final var query = "select * from patient where patientId = ?";

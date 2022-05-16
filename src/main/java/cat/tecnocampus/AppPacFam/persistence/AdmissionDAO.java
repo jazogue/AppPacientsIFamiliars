@@ -69,10 +69,9 @@ public class AdmissionDAO implements cat.tecnocampus.AppPacFam.application.Admis
 	}
 
 	@Override
-	public void modifyAdmission(AdmissionDTO admission) {
-		final var query = "UPDATE admission SET startDate = ?, finalDate = ?, hospitalCareType = ?  WHERE admissionId = ?";
-		jdbcTemplate.update(query, admission.getStartDate(), admission.getFinalDate(),
-				admission.getHospitalCareType().toString(), admission.getAdmissionId());
+	public void addFinishDate(String admissionId) {
+		final var query = "UPDATE admission SET finalDate = ? WHERE admissionId = ?";
+		jdbcTemplate.update(query, new Date(), admissionId);
 	}
 
 	@Override

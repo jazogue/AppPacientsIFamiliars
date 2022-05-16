@@ -11,7 +11,7 @@ public interface AdmissionDAO {
 
 	void setNewAdmission(AdmissionDTO admission, String patientId);
 
-	void modifyAdmission(AdmissionDTO admission);
+	void addFinishDate(String admissionId);
 
 	void modifyAdmissionTypeByPatientId(String patientId);
 }
