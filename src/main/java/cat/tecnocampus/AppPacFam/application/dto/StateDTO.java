@@ -9,9 +9,10 @@ import javax.validation.constraints.NotNull;
 import cat.tecnocampus.AppPacFam.domain.State.StateType;
 
 public class StateDTO {
-	@NotNull(message = "Id cannot be null")
-	@NotBlank(message = "Id cannot be blank")
+	@NotNull(message = "State Id cannot be null")
+	@NotBlank(message = "State Id cannot be blank")
 	private String stateId;
+	private String eventId;
 	private Date startTime;
 	@NotNull(message = "State type cannot be null")
 	private StateType stateType;
@@ -28,6 +29,14 @@ public class StateDTO {
 
 	public void setStateId(String stateId) {
 		this.stateId = stateId;
+	}
+	
+	public String getEventId() {
+		return eventId;
+	}
+
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
 	}
 
 	public Date getStartTime() {

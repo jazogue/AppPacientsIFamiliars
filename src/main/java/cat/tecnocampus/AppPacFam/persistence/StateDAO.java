@@ -43,7 +43,7 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 
 	@Override
 	public List<StateDTO> getStatesByAdmissionId(String id, String idiom) {
-		final var query = "select state.stateId, translation.translatedText, state.stateType, treatment_event.startTime from translation inner join state on translation.stateId = state.stateId inner join treatment_event on "
+		final var query = "select state.stateId, treatment_event.eventId, translation.translatedText, state.stateType, treatment_event.startTime from translation inner join state on translation.stateId = state.stateId inner join treatment_event on "
 				+ "state.stateId = treatment_event.stateId inner join admission on treatment_event.admissionId = admission.admissionId where admission.admissionId = ? AND translation.translationIdiom = ? OR translation.translationIdiom = 'any'";
 
 		var result = jdbcTemplate.query(query, statesRowMapper, id, idiom);
@@ -54,10 +54,10 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 	public List<StateDTO> getTypedStatesByPatientId(String id, boolean type, String idiom) {
 		var query = "";
 		if (type)
-			query = "SELECT state.stateId, translation.translatedText, state.stateType, treatment_event.startTime from translation right outer join state on translation.stateId = state.stateId state right outer join treatment_event on "
+			query = "SELECT state.stateId, treatment_event.eventId, translation.translatedText, state.stateType, treatment_event.startTime from translation right outer join state on translation.stateId = state.stateId state right outer join treatment_event on "
 					+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.stateType = 'generic' AND patient.patientId = ? AND translation.translationIdiom = ?);";
 		else
-			query = "SELECT state.stateId, translation.translatedText, state.stateType, treatment_event.startTime from translation right outer join state on translation.stateId = state.stateId state right outer join treatment_event on "
+			query = "SELECT state.stateId, treatment_event.eventId, translation.translatedText, state.stateType, treatment_event.startTime from translation right outer join state on translation.stateId = state.stateId state right outer join treatment_event on "
 					+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.stateType = 'personalitzat' AND patient.patientId = ? AND translation.translationIdiom = ?);";
 		var result = jdbcTemplate.query(query, statesRowMapperDefault, id, idiom);
 

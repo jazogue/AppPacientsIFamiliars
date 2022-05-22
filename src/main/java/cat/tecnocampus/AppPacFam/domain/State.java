@@ -7,6 +7,7 @@ public class State {
 	public enum StateType {personalitzat, generic}
 	
 	private String stateId;
+	private String eventId;
 	private StateType stateType;
 	private Date startTime;
 	private String locationName;
@@ -22,6 +23,14 @@ public class State {
 
 	public void setStateId(String stateId) {
 		this.stateId = stateId;
+	}
+	
+	public String getEventId() {
+		return eventId;
+	}
+
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
 	}
 	
 	public StateType getStateType() {
