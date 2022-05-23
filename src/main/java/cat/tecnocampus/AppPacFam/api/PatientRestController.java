@@ -41,11 +41,6 @@ public class PatientRestController {
 		return appPacFamController.getPatientByAnyCriteria(value);
 	}
 
-	@GetMapping("/patient/summary/{id}")
-	public PatientDTO getPatientSummaryById(@PathVariable String id) {
-		return appPacFamController.getPatientSummaryById(id);
-	}
-
 	@PostMapping("/patient")
 	public JsonObject postPatient(@RequestBody @Valid PatientDTO patient) {
 		return appPacFamController.setNewPatient(patient);
@@ -83,10 +78,6 @@ public class PatientRestController {
 	}
 
 	// STATES
-	@GetMapping("/states")
-	public List<StateDTO> getStates() {
-		return appPacFamController.getStates();
-	}
 
 	@GetMapping("/states/generic/{idiom}")
 	public List<StateDTO> getGenericStates(@PathVariable String idiom) {
@@ -103,19 +94,9 @@ public class PatientRestController {
 		return appPacFamController.getStatesByAdmissionId(id, idiom);
 	}
 
-	@GetMapping("/states/patient/{id}/gen/{idiom}")
-	public List<StateDTO> getGenericStatesByPatientId(@PathVariable String id, @PathVariable String idiom) {
-		return appPacFamController.getTypedStatesByPatientId(id, true, idiom);
-	}
-
-	@GetMapping("/states/patient/{id}/per/{idiom}")
-	public List<StateDTO> getCustomStatesByPatientId(@PathVariable String id, @PathVariable String idiom) {
-		return appPacFamController.getTypedStatesByPatientId(id, false, idiom);
-	}
-
-	@PostMapping("/state/gen")
-	public void postGenericState(@RequestBody @Valid StateDTO state) {
-		appPacFamController.setNewGenericState(state);
+	@PostMapping("/state/generic")
+	public JsonObject postGenericState(@RequestBody @Valid StateDTO state) {
+		return appPacFamController.setNewGenericState(state);
 	}
 
 	@PostMapping("/state/generic/{stateId}/admission/{admissionId}")
@@ -140,19 +121,14 @@ public class PatientRestController {
 	}
 
 	@PostMapping("/location")
-	public void postLocation(@RequestBody @Valid LocationDTO location) {
-		appPacFamController.setNewLocation(location);
-	}
-
-	@GetMapping("/location/{patientId}")
-	public List<LocationDTO> getLocationsByPatientId(@PathVariable String patientId) {
-		return appPacFamController.getLocationsByPatientId(patientId);
+	public JsonObject postLocation(@RequestBody @Valid LocationDTO location) {
+		return appPacFamController.setNewLocation(location);
 	}
 
 	// TRANSLATIONS
 	@PostMapping("/translation/state/{stateId}")
-	public void postTranslation(@RequestBody @Valid TranslationDTO translation, @PathVariable String stateId) {
-		appPacFamController.setNewTranslation(translation, stateId);
+	public JsonObject postTranslation(@RequestBody @Valid TranslationDTO translation, @PathVariable String stateId) {
+		return appPacFamController.setNewTranslation(translation, stateId);
 	}
 
 	@GetMapping("/translations/{stateId}")

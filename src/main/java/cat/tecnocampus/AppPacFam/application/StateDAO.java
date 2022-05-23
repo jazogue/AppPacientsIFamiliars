@@ -4,17 +4,15 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.google.gson.JsonObject;
+
 import cat.tecnocampus.AppPacFam.application.dto.StateDTO;
 
 public interface StateDAO {
 
-	List<StateDTO> getStates();
-
 	List<StateDTO> getStatesByAdmissionId(String id, String idiom);
 
-	void setNewGenericState(StateDTO state);
-
-	List<StateDTO> getTypedStatesByPatientId(String id, boolean type, String idiom);
+	JsonObject setNewGenericState(StateDTO state);
 
 	void setNewGenericStateToPatient(String stateId, String admissionId);
 

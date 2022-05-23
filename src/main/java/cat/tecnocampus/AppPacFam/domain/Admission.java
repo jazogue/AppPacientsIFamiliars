@@ -7,6 +7,7 @@ import java.util.List;
 public class Admission {
 
 	private String admissionId;
+
 	public enum HospitalCareType {
 		quirurgic, urgencies
 	}

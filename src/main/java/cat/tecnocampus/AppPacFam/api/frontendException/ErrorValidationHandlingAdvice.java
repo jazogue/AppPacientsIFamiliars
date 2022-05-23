@@ -15,60 +15,56 @@ import java.util.List;
 
 @ControllerAdvice
 public class ErrorValidationHandlingAdvice {
-    @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    ValidationErrorResponse onConstraintValidationException(
-            ConstraintViolationException e) {
-        ValidationErrorResponse error = new ValidationErrorResponse();
-        for (ConstraintViolation violation : e.getConstraintViolations()) {
-            error.getViolations().add(
-                    new Violation(violation.getPropertyPath().toString(), violation.getMessage()));
-        }
-        return error;
-    }
+	@ExceptionHandler(ConstraintViolationException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	ValidationErrorResponse onConstraintValidationException(ConstraintViolationException e) {
+		ValidationErrorResponse error = new ValidationErrorResponse();
+		for (ConstraintViolation violation : e.getConstraintViolations()) {
+			error.getViolations().add(new Violation(violation.getPropertyPath().toString(), violation.getMessage()));
+		}
+		return error;
+	}
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    ValidationErrorResponse onMethodArgumentNotValidException(
-            MethodArgumentNotValidException e) {
-        ValidationErrorResponse error = new ValidationErrorResponse();
-        for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-            error.getViolations().add(
-                    new Violation(fieldError.getField(), fieldError.getDefaultMessage()));
-        }
-        return error;
-    }
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	ValidationErrorResponse onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+		ValidationErrorResponse error = new ValidationErrorResponse();
+		for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
+			error.getViolations().add(new Violation(fieldError.getField(), fieldError.getDefaultMessage()));
+		}
+		return error;
+	}
 
-    public class ValidationErrorResponse {
+	public class ValidationErrorResponse {
 
-        private List<Violation> violations = new ArrayList<>();
+		private List<Violation> violations = new ArrayList<>();
 
-        public ValidationErrorResponse() {
-        }
+		public ValidationErrorResponse() {
+		}
 
-        public List<Violation> getViolations() {
-            return violations;
-        }
-    }
+		public List<Violation> getViolations() {
+			return violations;
+		}
+	}
 
-    public class Violation {
+	public class Violation {
 
-        private final String fieldName;
-        private final String message;
+		private final String fieldName;
+		private final String message;
 
-        public Violation(String fieldName, String message) {
-            this.fieldName = fieldName;
-            this.message = message;
-        }
+		public Violation(String fieldName, String message) {
+			this.fieldName = fieldName;
+			this.message = message;
+		}
 
-        public String getFieldName() {
-            return fieldName;
-        }
+		public String getFieldName() {
+			return fieldName;
+		}
 
-        public String getMessage() {
-            return message;
-        }
-    }
+		public String getMessage() {
+			return message;
+		}
+	}
 }

@@ -12,7 +12,7 @@ public class LocationDTO {
 	@NotNull(message = "Name cannot be null")
 	@NotBlank(message = "Name cannot be blank")
 	private String locationName;
-	
+
 	public LocationDTO() {
 		this.setLocationId(UUID.randomUUID().toString());
 	}
@@ -20,7 +20,6 @@ public class LocationDTO {
 	public String getLocationId() {
 		return locationId;
 	}
-
 
 	public void setLocationId(String locationId) {
 		this.locationId = locationId;

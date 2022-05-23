@@ -10,6 +10,9 @@ import org.simpleflatmapper.jdbc.spring.RowMapperImpl;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import cat.tecnocampus.AppPacFam.application.dto.StateDTO;
 import cat.tecnocampus.AppPacFam.domain.Translation.TranslationIdiom;
 
@@ -24,22 +27,12 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 
 	ResultSetExtractorImpl<StateDTO> statesRowMapper = JdbcTemplateMapperFactory.newInstance().addKeys("startTime")
 			.newResultSetExtractor(StateDTO.class);
-	
+
 	ResultSetExtractorImpl<StateDTO> statesRowMapperDefault = JdbcTemplateMapperFactory.newInstance().addKeys("stateId")
 			.newResultSetExtractor(StateDTO.class);
 
 	RowMapperImpl<StateDTO> stateRowMapper = JdbcTemplateMapperFactory.newInstance().addKeys("stateId")
 			.newRowMapper(StateDTO.class);
-
-	@Override
-	public List<StateDTO> getStates() {
-		final var query = "select state.stateId, state.stateName, state.stateType, treatment_event.startTime from state inner join treatment_event on "
-				+ "state.stateId = treatment_event.stateId";
-
-		var result = jdbcTemplate.query(query, statesRowMapperDefault);
-		result.sort((o1, o2) -> o1.getStartTime().compareTo(o2.getStartTime()));
-		return result;
-	}
 
 	@Override
 	public List<StateDTO> getStatesByAdmissionId(String id, String idiom) {
@@ -51,26 +44,12 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 		return result;
 	}
 
-	public List<StateDTO> getTypedStatesByPatientId(String id, boolean type, String idiom) {
-		var query = "";
-		if (type)
-			query = "SELECT state.stateId, treatment_event.eventId, translation.translatedText, state.stateType, treatment_event.startTime from translation right outer join state on translation.stateId = state.stateId state right outer join treatment_event on "
-					+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.stateType = 'generic' AND patient.patientId = ? AND translation.translationIdiom = ?);";
-		else
-			query = "SELECT state.stateId, treatment_event.eventId, translation.translatedText, state.stateType, treatment_event.startTime from translation right outer join state on translation.stateId = state.stateId state right outer join treatment_event on "
-					+ "state.stateId = treatment_event.stateId right outer join patient on treatment_event.patientId = patient.patientId WHERE (state.stateType = 'personalitzat' AND patient.patientId = ? AND translation.translationIdiom = ?);";
-		var result = jdbcTemplate.query(query, statesRowMapperDefault, id, idiom);
-
-		final var queryUpdate = "UPDATE state SET checked = TRUE WHERE checked = FALSE;";
-		jdbcTemplate.update(queryUpdate);
-
-		return result;
-	}
-
 	@Override
-	public void setNewGenericState(StateDTO state) {
-		final var query1 = "INSERT INTO state (stateId, stateName, stateType) VALUES (?, ?, ?)";
-		jdbcTemplate.update(query1, state.getStateId(), state.getStateType().toString());
+	public JsonObject setNewGenericState(StateDTO state) {
+		final var query1 = "INSERT INTO state (stateId, stateType, locationId) VALUES (?, ?, ?)";
+		jdbcTemplate.update(query1, state.getStateId(), state.getStateType().toString(), state.getLocation());
+		
+		return JsonParser.parseString("{'id': '" + state.getStateId() + "'}").getAsJsonObject();
 	}
 
 	@Override
@@ -88,7 +67,8 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 		final var query3 = "INSERT INTO translation (translationId, translatedText, translationIdiom, stateId) VALUES (?, ?, ?, ?)";
 		jdbcTemplate.update(query1, stateId, state.getStateType().toString(), state.getLocation());
 		jdbcTemplate.update(query2, UUID.randomUUID().toString(), new Date(), admissionId, stateId);
-		jdbcTemplate.update(query3, UUID.randomUUID().toString(), state.getTranslatedText(), TranslationIdiom.any.toString(), stateId);
+		jdbcTemplate.update(query3, UUID.randomUUID().toString(), state.getTranslatedText(),
+				TranslationIdiom.any.toString(), stateId);
 
 	}
 

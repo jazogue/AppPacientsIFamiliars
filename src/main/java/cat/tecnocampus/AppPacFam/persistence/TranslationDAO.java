@@ -8,6 +8,9 @@ import org.simpleflatmapper.jdbc.spring.RowMapperImpl;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import cat.tecnocampus.AppPacFam.application.dto.TranslationDTO;
 
 @Repository
@@ -26,11 +29,13 @@ public class TranslationDAO implements cat.tecnocampus.AppPacFam.application.Tra
 			.addKeys("translationId").newRowMapper(TranslationDTO.class);
 
 	@Override
-	public void setNewTranslation(TranslationDTO translation, String stateId) {
+	public JsonObject setNewTranslation(TranslationDTO translation, String stateId) {
 		final var query = "INSERT INTO translation (translationId, translatedText, translationIdiom, stateId) VALUES (?, ?, ?, ?)";
 
 		jdbcTemplate.update(query, translation.getTranslationId(), translation.getTranslatedText(),
 				translation.getTranslationIdiom().toString(), stateId);
+		
+		return JsonParser.parseString("{'id': '" + translation.getTranslationId() + "'}").getAsJsonObject();
 	}
 
 	@Override

@@ -16,7 +16,6 @@ import com.google.gson.JsonParser;
 import cat.tecnocampus.AppPacFam.application.dto.PatientDTO;
 import cat.tecnocampus.AppPacFam.application.exception.PatientAlreadyExistsException;
 import cat.tecnocampus.AppPacFam.application.exception.PatientNotFoundException;
-import cat.tecnocampus.AppPacFam.domain.Patient;
 
 @Repository
 public class PatientDAO implements cat.tecnocampus.AppPacFam.application.PatientDAO {
@@ -89,9 +88,11 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 		}
 
 		final var query = "INSERT INTO patient (patientId, patientName, firstSurname, secondSurname, healthCardIdentifier) VALUES (?, ?, ?, ?, ?)";
-		jdbcTemplate.update(query, patient.getPatientId(), patient.getPatientName().substring(0, 1).toUpperCase() + patient.getPatientName().substring(1), 
+		jdbcTemplate.update(query, patient.getPatientId(),
+				patient.getPatientName().substring(0, 1).toUpperCase() + patient.getPatientName().substring(1),
 				patient.getFirstSurname().substring(0, 1).toUpperCase() + patient.getFirstSurname().substring(1),
-				patient.getSecondSurname().substring(0, 1).toUpperCase() + patient.getSecondSurname().substring(1), patient.getHealthCardIdentifier().toUpperCase());
+				patient.getSecondSurname().substring(0, 1).toUpperCase() + patient.getSecondSurname().substring(1),
+				patient.getHealthCardIdentifier().toUpperCase());
 
 		return JsonParser.parseString("{'id': '" + patient.getPatientId() + "'}").getAsJsonObject();
 	}
@@ -119,8 +120,10 @@ public class PatientDAO implements cat.tecnocampus.AppPacFam.application.Patient
 	@Override
 	public void modifyPatient(PatientDTO patient) {
 		final var query = "UPDATE patient SET patientName = ?, firstSurname = ?, secondSurname = ?, healthCardIdentifier = ?  WHERE patientId = ?";
-		jdbcTemplate.update(query, patient.getPatientName().substring(0, 1).toUpperCase() + patient.getPatientName().substring(1) ,
-				patient.getFirstSurname().substring(0, 1).toUpperCase() + patient.getFirstSurname().substring(1), patient.getSecondSurname().substring(0, 1).toUpperCase() + patient.getSecondSurname().substring(1) ,
+		jdbcTemplate.update(query,
+				patient.getPatientName().substring(0, 1).toUpperCase() + patient.getPatientName().substring(1),
+				patient.getFirstSurname().substring(0, 1).toUpperCase() + patient.getFirstSurname().substring(1),
+				patient.getSecondSurname().substring(0, 1).toUpperCase() + patient.getSecondSurname().substring(1),
 				patient.getHealthCardIdentifier().toUpperCase(), patient.getPatientId());
 	}
 

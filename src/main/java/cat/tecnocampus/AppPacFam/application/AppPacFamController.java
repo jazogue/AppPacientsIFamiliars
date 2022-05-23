@@ -12,9 +12,8 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
-import javax.validation.Valid;
 
-@Service // same as @Component
+@Service
 public class AppPacFamController {
 	private PatientDAO patientDAO;
 	private StateDAO stateDAO;
@@ -40,32 +39,16 @@ public class AppPacFamController {
 		return patientDAO.getPatientById(id);
 	}
 
-	public List<StateDTO> getStates() {
-		return stateDAO.getStates();
-	}
-
 	public List<StateDTO> getStatesByAdmissionId(String id, String idiom) {
 		return stateDAO.getStatesByAdmissionId(id, idiom);
 	}
 
-	public PatientDTO getPatientSummaryById(String id) {
-		PatientDTO patientDto = new PatientDTO();
-		patientDto = patientDAO.getPatientById(id);
-
-		return patientDto;
-	}
-
 	public JsonObject setNewPatient(PatientDTO patient) {
 		return patientDAO.setNewPatient(patient);
-
 	}
 
-	public void setNewGenericState(StateDTO state) {
-		stateDAO.setNewGenericState(state);
-	}
-
-	public List<StateDTO> getTypedStatesByPatientId(String id, boolean type, String idiom) {
-		return stateDAO.getTypedStatesByPatientId(id, type, idiom);
+	public JsonObject setNewGenericState(StateDTO state) {
+		return stateDAO.setNewGenericState(state);
 	}
 
 	public void setNewGenericStateToPatient(String stateId, String admissionId) {
@@ -112,24 +95,20 @@ public class AppPacFamController {
 		return locationDAO.getAllLocations();
 	}
 
-	public void setNewLocation(LocationDTO location) {
-		locationDAO.setNewLocation(location);
+	public JsonObject setNewLocation(LocationDTO location) {
+		return locationDAO.setNewLocation(location);
 	}
 
 	public LocationDTO getLocationById(String locationId) {
 		return locationDAO.getLocationById(locationId);
 	}
 
-	public List<LocationDTO> getLocationsByPatientId(String patientId) {
-		return locationDAO.getLocationsByPatientId(patientId);
-	}
-
 	public List<TranslationDTO> getTranslationsByStateId(String stateId) {
 		return translationDAO.getTranslationsByStateId(stateId);
 	}
 
-	public void setNewTranslation(TranslationDTO translation, String stateId) {
-		translationDAO.setNewTranslation(translation, stateId);
+	public JsonObject setNewTranslation(TranslationDTO translation, String stateId) {
+		return translationDAO.setNewTranslation(translation, stateId);
 	}
 
 }
