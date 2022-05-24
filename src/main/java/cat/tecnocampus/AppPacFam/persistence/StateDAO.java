@@ -37,9 +37,9 @@ public class StateDAO implements cat.tecnocampus.AppPacFam.application.StateDAO 
 	@Override
 	public List<StateDTO> getStatesByAdmissionId(String id, String idiom) {
 		final var query = "select state.stateId, treatment_event.eventId, translation.translatedText, state.stateType, treatment_event.startTime from translation inner join state on translation.stateId = state.stateId inner join treatment_event on "
-				+ "state.stateId = treatment_event.stateId inner join admission on treatment_event.admissionId = admission.admissionId where admission.admissionId = ? AND translation.translationIdiom = ? OR translation.translationIdiom = 'any'";
+				+ "state.stateId = treatment_event.stateId inner join admission on treatment_event.admissionId = admission.admissionId where admission.admissionId = ? AND translation.translationIdiom = ? OR admission.admissionId = ? AND translation.translationIdiom = 'any'";
 
-		var result = jdbcTemplate.query(query, statesRowMapper, id, idiom);
+		var result = jdbcTemplate.query(query, statesRowMapper, id, idiom, id);
 		result.sort((o1, o2) -> o1.getStartTime().compareTo(o2.getStartTime()));
 		return result;
 	}
