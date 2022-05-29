@@ -12,8 +12,6 @@ public class State {
 	private String eventId;
 	private StateType stateType;
 	private Date startTime;
-	private String locationName;
-	private String translatedText;
 
 	public State() {
 		this.stateId = UUID.randomUUID().toString();
@@ -49,22 +47,6 @@ public class State {
 
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
-	}
-
-	public String getLocationName() {
-		return locationName;
-	}
-
-	public void setLocationName(String locationName) {
-		this.locationName = locationName;
-	}
-
-	public String getTranslatedText() {
-		return translatedText;
-	}
-
-	public void setTranslatedText(String translatedText) {
-		this.translatedText = translatedText;
 	}
 
 }
