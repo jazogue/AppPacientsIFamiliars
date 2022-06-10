@@ -46,7 +46,7 @@ public class PatientRestController {
 		return appPacFamController.setNewPatient(patient);
 	}
 
-	@PostMapping("/patient/modify")
+	@PutMapping("/patient/modify")
 	public void modifyPatient(@RequestBody @Valid PatientDTO patient) {
 		appPacFamController.modifyPatient(patient);
 	}
@@ -72,7 +72,7 @@ public class PatientRestController {
 		appPacFamController.addFinishDate(admissionId);
 	}
 
-	@PostMapping("/admission/type/patient/{patientId}")
+	@PutMapping("/admission/type/patient/{patientId}")
 	public void modifyAdmissionTypeByPatientId(@PathVariable String patientId) {
 		appPacFamController.modifyAdmissionTypeByPatientId(patientId);
 	}
